@@ -121,3 +121,4 @@ dmypy.json
 ### Python Patch ###
 .venv/
 CreatePiPWheel.bat
+src/CryptoLibrary/keys/
