@@ -123,7 +123,7 @@ It can also be saved on test env persistently as a hash.
 THIS IS JUST AN ALPHA VERSION !!11!!1
 -------------------------------------
     """
-    
+
     ROBOT_LIBRARY_DOC_FORMAT = 'reST'
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
