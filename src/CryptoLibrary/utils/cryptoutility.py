@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os
-from nacl import pwhash, utils, secret, hash
+from nacl import pwhash, utils, secret, hash, exceptions
 import json
 from nacl.encoding import Base64Encoder, RawEncoder
 from nacl.public import PrivateKey, PublicKey, SealedBox
@@ -80,7 +80,7 @@ class CryptoUtility(object):
         self.public_key = self.private_key.public_key
 
     def set_private_key(self, private_key_json):
-        self._decrypt_and_set_private_key(json.loads(private_key_json))
+        return self._decrypt_and_set_private_key(json.loads(private_key_json))
 
     def _write_bytes_as_b64_to_file(self, byte_sequence, file_path):
         b64bytes = self._base64(byte_sequence)
@@ -110,7 +110,27 @@ class CryptoUtility(object):
                 print(e.args[1])
 
     def delete_password_hash_file(self):
-        os.remove(self.password_hash_file)
+        try:
+            os.remove(self.password_hash_file)
+        except FileNotFoundError:
+            pass
+        return True
+
+    def delete_key_store(self):
+        try:
+            os.remove(self.private_key_store)
+        except FileNotFoundError:
+            pass
+        self.delete_public_key_file()
+        self.delete_password_hash_file()
+        return True
+
+    def delete_public_key_file(self):
+        try:
+            os.remove(self.public_key_file)
+        except FileNotFoundError:
+            pass
+        return True
 
     def export_password_hash_to_file(self):
         if not self._password_hash:
@@ -134,9 +154,18 @@ class CryptoUtility(object):
             raise ValueError('No public key found to export. Generate or set public key first!')
         else:
             self._write_bytes_as_b64_to_file(self.public_key._public_key, self.public_key_file)
+            return os.path.abspath(self.public_key_file)
 
     def import_public_key_from_file(self):
-        self.public_key = PublicKey(self._read_bytes_as_b64_from_file(self.public_key_file))
+        try:
+            self.public_key = PublicKey(self._read_bytes_as_b64_from_file(self.public_key_file))
+        except exceptions.TypeError as e:
+            print(e)
+        if self.public_key:
+            return self._base64(self.public_key._public_key)
+
+    def set_public_key(self, b64_public_key):
+        self.public_key = PublicKey(Base64Encoder.decode(b64_public_key))
 
     def export_private_key_to_file(self):
         if not self.private_key:
@@ -156,13 +185,15 @@ class CryptoUtility(object):
 
     def import_private_key_from_file(self):
         private_key_store = self._read_dict_from_json_file(self.private_key_store)
-        self._decrypt_and_set_private_key(private_key_store)
+        return self._decrypt_and_set_private_key(private_key_store)
 
     def _encrypt_private_key(self, secure_key):
         box = secret.SecretBox(secure_key)
         return self._base64(box.encrypt(self.private_key._private_key))
 
     def _decrypt_and_set_private_key(self, private_key_store):
+        if not self.password:
+            raise AttributeError('No password found! Password must be set ahead!')
         secure_key = pwhash.argon2i.kdf(secret.SecretBox.KEY_SIZE,
                                         Base64Encoder.decode(self.password),
                                         Base64Encoder.decode(private_key_store['salt']),
@@ -170,8 +201,12 @@ class CryptoUtility(object):
                                         memlimit=private_key_store['mem'])
         encrypted = Base64Encoder.decode(private_key_store['private_key'])
         box = secret.SecretBox(secure_key)
-        self.private_key = PrivateKey(box.decrypt(encrypted))
-        self.public_key = self.private_key.public_key
+        try:
+            self.private_key = PrivateKey(box.decrypt(encrypted))
+            self.public_key = self.private_key.public_key
+            return True
+        except Exception as e:
+            print(e)
 
     def encrypt_text(self, text: str):
         if not self.public_key:

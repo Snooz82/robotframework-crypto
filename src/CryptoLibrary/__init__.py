@@ -14,6 +14,9 @@
 
 from CryptoLibrary.utils import CryptoUtility
 from robot.libraries.BuiltIn import BuiltIn
+from robot.api import logger
+import re
+
 
 __version__ = '0.0.1'
 
@@ -22,14 +25,41 @@ class CryptoLibrary(object):
 
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
     ROBOT_LIBRARY_VERSION = __version__
+    ROBOT_LISTENER_API_VERSION = 3
 
     def __init__(self, password=None):
+        self.ROBOT_LIBRARY_LISTENER = self
+        self.value_list = list()
         self.crypto = CryptoUtility()
+        self.original_log_level = 'INFO'
+        self.disable_logging = False
         if password:
             self.crypto.password = password
 
-    def decrypt_text(self, variable_name, cipher_text):
-        text = self.crypto.decrypt_text(cipher_text)
+    def decrypt_text_to_variable(self, variable_name, cipher_text):
+        logger.info(f'Decrypting text into variable ${{{variable_name}}}')
+        plaintext = self.crypto.decrypt_text(cipher_text)
+        self.value_list.append(plaintext)
         name = BuiltIn()._get_var_name(f'${{{variable_name}}}')
-        value = BuiltIn()._get_var_value(name, [text])
+        value = BuiltIn()._get_var_value(name, [plaintext])
         BuiltIn()._variables.set_test(name, value)
+
+    def get_decrypted_text(self, cipher_text):
+        logger.info(f'Decrypting text and return value.')
+        plaintext = self.crypto.decrypt_text(cipher_text)
+        self.value_list.append(plaintext)
+        return plaintext
+
+    def suppress_logging(self, disable:bool):
+        if disable:
+            logger.info('disable logging...')
+            self.original_log_level = BuiltIn().set_log_level('NONE')
+        else:
+            BuiltIn().set_log_level(self.original_log_level)
+            logger.info('enable logging...')
+            logger.debug(f'Switching Loglevel from NONE to {self.original_log_level}.')
+
+    def _log_message(self, message):
+        if self.value_list:
+            pattern = re.compile("|".join(self.value_list))
+            message.message: message.message = pattern.sub('***', message.message)
