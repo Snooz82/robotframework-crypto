@@ -15,7 +15,7 @@
 from PyInquirer import style_from_dict, Token, prompt
 from CryptoLibrary.utils import CryptoUtility
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 class Encrypter(object):

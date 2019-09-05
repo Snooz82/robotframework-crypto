@@ -54,6 +54,11 @@ class CryptoUtility(object):
     @key_path.setter
     def key_path(self, key_path):
         if not os.path.isdir(key_path):
+            try:
+                os.mkdir(key_path)
+            except OSError as e:
+                print(e)
+        if not os.path.isdir(key_path):
             raise ValueError(f'key_path: "{key_path}" is not a valid directory!')
         elif not os.access(key_path, os.W_OK | os.X_OK):
             raise PermissionError(f'Permission Denied.'

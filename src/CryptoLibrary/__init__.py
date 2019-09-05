@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 class CryptoLibrary(object):
