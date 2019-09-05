@@ -86,10 +86,12 @@ class CryptoUtility(object):
         b64bytes = self._base64(byte_sequence)
         with open(file_path, 'w') as key_file:
             key_file.write(b64bytes)
+            return os.path.abspath(file_path)
 
     def _write_dict_as_json_file(self, dictionary, file_path):
         with open(file_path, 'w') as json_file:
             json.dump(dictionary, json_file)
+            return os.path.abspath(file_path)
 
     def _read_dict_from_json_file(self, file_path, silent=False):
         try:
@@ -138,7 +140,7 @@ class CryptoUtility(object):
         elif not self.key_path:
             raise ValueError('No valid path found.')
         else:
-            self._write_dict_as_json_file({'password_hash': self.password}, self.password_hash_file)
+            return self._write_dict_as_json_file({'password_hash': self.password}, self.password_hash_file)
 
     def _import_password_hash_from_file(self, silent=False):
         if not self.key_path:
@@ -153,8 +155,7 @@ class CryptoUtility(object):
         if not self.public_key:
             raise ValueError('No public key found to export. Generate or set public key first!')
         else:
-            self._write_bytes_as_b64_to_file(self.public_key._public_key, self.public_key_file)
-            return os.path.abspath(self.public_key_file)
+            return self._write_bytes_as_b64_to_file(self.public_key._public_key, self.public_key_file)
 
     def import_public_key_from_file(self):
         try:
@@ -181,7 +182,7 @@ class CryptoUtility(object):
                                  'salt': self._base64(salt),
                                  'ops': self.ops,
                                  'mem': self.mem}
-            self._write_dict_as_json_file(private_key_store, self.private_key_store)
+            return self._write_dict_as_json_file(private_key_store, self.private_key_store)
 
     def import_private_key_from_file(self):
         private_key_store = self._read_dict_from_json_file(self.private_key_store)

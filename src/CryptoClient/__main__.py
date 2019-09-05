@@ -109,7 +109,8 @@ class Encrypter(object):
         if answer['public_key'] != '':
             try:
                 crypto.set_public_key(answer['public_key'])
-                crypto.export_public_key_to_file()
+                print(crypto.export_public_key_to_file())
+                print('Key successfully stored!\n')
             except Exception as e:
                 print(e)
         self.main_menu()
@@ -135,6 +136,7 @@ class Encrypter(object):
         key = crypto.import_public_key_from_file()
         if key:
             print(f'Public Key: {key}')
+            print()
 
 
 if __name__ == "__main__":

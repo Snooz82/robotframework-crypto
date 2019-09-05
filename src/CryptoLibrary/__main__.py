@@ -177,12 +177,12 @@ class Encrypter(object):
             print('Generating key pair...')
             crypto.password = self._set_password()
             if answer['save_pwd'] == 'yes':
-                crypto.export_password_hash_to_file()
+                print(crypto.export_password_hash_to_file())
             else:
                 crypto.delete_password_hash_file()
-            crypto.export_private_key_to_file()
-            crypto.export_public_key_to_file()
-            print('Key pair successfully generated!')
+            print(crypto.export_private_key_to_file())
+            print(crypto.export_public_key_to_file())
+            print('Key pair successfully generated!\n')
             self._show_public_key()
             self.configure_key_pair()
         else:
@@ -245,8 +245,8 @@ class Encrypter(object):
                     crypto.export_password_hash_to_file()
                 else:
                     crypto.delete_password_hash_file()
-                crypto.export_private_key_to_file()
-                crypto.export_public_key_to_file()
+                print(crypto.export_private_key_to_file())
+                print(crypto.export_public_key_to_file())
                 print('Key pair successfully generated!')
             except Exception as e:
                 print(e)
@@ -348,7 +348,8 @@ class Encrypter(object):
         if answer['public_key'] != '':
             try:
                 crypto.set_public_key(answer['public_key'])
-                crypto.export_public_key_to_file()
+                print(crypto.export_public_key_to_file())
+                print('Key successfully stored!\n')
             except Exception as e:
                 print(e)
         self.configure_public_key()
@@ -399,6 +400,7 @@ class Encrypter(object):
         key = crypto.import_public_key_from_file()
         if key:
             print(f'Public Key: {key}')
+            print()
 
 
 if __name__ == "__main__":
