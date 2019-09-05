@@ -13,36 +13,23 @@
 # limitations under the License.
 
 from CryptoLibrary.utils import CryptoUtility
+from robot.libraries.BuiltIn import BuiltIn
 
-__version__ = '0.0.0'
+__version__ = '0.0.1'
 
 
 class CryptoLibrary(object):
 
+    ROBOT_LIBRARY_SCOPE = 'GLOBAL'
+    ROBOT_LIBRARY_VERSION = __version__
 
-    @staticmethod
-    def main():
-        crypto = CryptoUtility()
-        crypto.generate_key_pair()
-        crypto.password = 'fingolfin'
-        crypto.export_sym_key_to_file()
-        crypto.export_public_key_to_file()
-        crypto.export_private_key_to_file()
+    def __init__(self, password=None):
+        self.crypto = CryptoUtility()
+        if password:
+            self.crypto.password = password
 
-    @staticmethod
-    def enc():
-        crypto = CryptoUtility()
-        print(crypto.encrypt_text('Hallo'))
-
-    @staticmethod
-    def dec():
-        crypto = CryptoUtility()
-        print(crypto.decrypt_text('bjRv2SFS2cuTu+X3pczSlDeuxVL8K31tbLSTbr9pyjhCCDUUJlKgAsrklT9QnqAqmm6Oy8U='))
-        print(crypto.decrypt_text('A0INoWBTVgMbOcvS/y5fMtJ7Mhfvb4dRxaKnA8hlUwdLWCrWQl/OSdRzN7d27pxN22Hnbgg='))
-
-
-if __name__ == "__main__":
-    # execute only if run as a script
-    CryptoLibrary.dec()
-    #CryptoLibrary.enc()
-    #CryptoLibrary.main()
+    def decrypt_text(self, variable_name, cipher_text):
+        text = self.crypto.decrypt_text(cipher_text)
+        name = BuiltIn()._get_var_name(f'${{{variable_name}}}')
+        value = BuiltIn()._get_var_value(name, [text])
+        BuiltIn()._variables.set_test(name, value)

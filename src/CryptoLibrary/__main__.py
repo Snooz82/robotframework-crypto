@@ -40,7 +40,7 @@ class Encrypter(object):
                 'type': 'list',
                 'name': 'method',
                 'message': 'What do you want to do?',
-                'choices': ['Encrypt', 'Decrypt', 'Create key pair'],
+                'choices': ['Encrypt', 'Decrypt', 'Generate key pair', 'Set key pair'],
                 'filter': lambda val: val.lower()
             }
         ]
@@ -82,18 +82,25 @@ class Encrypter(object):
             ]
             answers = prompt(questions, style=self.style)
             crypto = CryptoUtility()
-            if not crypto.sym_key:
+            if not crypto.password:
                 input_pwd = prompt(input_password, style=self.style)
                 crypto.password = input_pwd['password']
             crypto.import_private_key_from_file()
             password = crypto.decrypt_text(answers['cipher_text'])
             print(f'Your password is: {password}')
-        else:
+        elif answer['method'] == 'generate key pair':
             questions = [
                 {
                     'type': 'list',
                     'name': 'regenerate',
                     'message': 'Do you want to regenerate the key pair?',
+                    'choices': ['Yes', 'No'],
+                    'filter': lambda val: val.lower()
+                },
+                {
+                    'type': 'list',
+                    'name': 'save_pwd',
+                    'message': 'Do you want save password?',
                     'choices': ['Yes', 'No'],
                     'filter': lambda val: val.lower()
                 }
@@ -106,10 +113,47 @@ class Encrypter(object):
                 crypto.generate_key_pair()
                 print('Generating key pair...')
                 crypto.password = self.set_password()
-                crypto.export_sym_key_to_file()
+                if answers['save_pwd'] == 'yes':
+                    crypto.export_password_hash_to_file()
+                else:
+                    crypto.delete_password_hash_file()
                 crypto.export_private_key_to_file()
                 crypto.export_public_key_to_file()
                 print('Key pair successfully generated!')
+        else:
+            questions = [
+                {
+                    'type': 'input',
+                    'name': 'private_key_store',
+                    'message': 'Input private key store json:',
+                },
+                {
+                    'type': 'password',
+                    'message': 'Enter the password to decrypt private key:',
+                    'name': 'password'
+                },
+                {
+                    'type': 'list',
+                    'name': 'save_pwd',
+                    'message': 'Do you want save password?',
+                    'choices': ['Yes', 'No'],
+                    'filter': lambda val: val.lower()
+                }
+            ]
+            crypto = CryptoUtility()
+            answers = prompt(questions, style=self.style)
+            if answers['private_key_store'] != '':
+                print('Setting key pair...')
+                crypto.password = answers['password']
+                crypto.set_private_key(answers['private_key_store'])
+                if answers['save_pwd'] == 'yes':
+                    crypto.export_password_hash_to_file()
+                else:
+                    crypto.delete_password_hash_file()
+                crypto.export_private_key_to_file()
+                crypto.export_public_key_to_file()
+                print('Key pair successfully generated!')
+
 
     def set_password(self):
         questions = [
