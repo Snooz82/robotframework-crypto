@@ -1,3 +1,6 @@
 include *.rst
 include *.txt
 include LICENSE
+
+# added by check_manifest.py
+recursive-include doc *.html
