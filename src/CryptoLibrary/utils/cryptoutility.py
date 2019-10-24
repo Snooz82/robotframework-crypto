@@ -13,8 +13,9 @@
 # limitations under the License.
 
 import os
-from nacl import pwhash, utils, secret, hash, exceptions
+import re
 import json
+from nacl import pwhash, utils, secret, hash, exceptions
 from nacl.encoding import Base64Encoder, RawEncoder
 from nacl.public import PrivateKey, PublicKey, SealedBox
 
@@ -24,6 +25,7 @@ class CryptoUtility(object):
     PRIVATE_KEY_FILE = 'private_key.json'
     PUBLIC_KEY_FILE = 'public_key.key'
     PASSWORD_HASH_FILE = 'password_hash.json'
+    CIPHER_PATTERN = '^crypt:(.*)'
 
     def __init__(self, key_path=None, password=None):
         self.private_key = None
@@ -222,7 +224,7 @@ class CryptoUtility(object):
         else:
             sealed_box = SealedBox(self.public_key)
             cipher_byte = sealed_box.encrypt(str.encode(text))
-            return self._base64(cipher_byte)
+            return f'crypt:{self._base64(cipher_byte)}'
 
     def decrypt_text(self, cipher_text):
         if not self.private_key:
@@ -231,6 +233,8 @@ class CryptoUtility(object):
             raise AttributeError('No private key known or found in file. Generate private key first!')
         else:
             unseal_box = SealedBox(self.private_key)
+            if re.fullmatch(self.CIPHER_PATTERN, cipher_text):
+                cipher_text = re.search(self.CIPHER_PATTERN, cipher_text).group(1)
             return unseal_box.decrypt(Base64Encoder.decode(cipher_text)).decode('utf-8')
 
     def _base64(self, data: bytes):

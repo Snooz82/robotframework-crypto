@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.0.2'
+__version__ = '0.1.0'
 
 
 class CryptoLibrary(object):
@@ -129,7 +129,7 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
     ROBOT_LIBRARY_VERSION = __version__
     ROBOT_LISTENER_API_VERSION = 3
 
-    def __init__(self, password=None):
+    def __init__(self, password=None, variable_decryption=False):
         """Password for private key can be given as argument."""
         self.ROBOT_LIBRARY_LISTENER = self
         self.value_list = list()
@@ -138,6 +138,8 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         self.disable_logging = False
         if password:
             self.crypto.password = password
+        self.variable_decryption = variable_decryption
+        self.builtin = BuiltIn()
 
     def decrypt_text_to_variable(self, variable_name, cipher_text):
         """Decrypts cipher_text and stores the decrypted plain text into a scalar variable.
@@ -145,9 +147,9 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         logger.info(f'Decrypting text into variable ${{{variable_name}}}')
         plaintext = self.crypto.decrypt_text(cipher_text)
         self.value_list.append(plaintext)
-        name = BuiltIn()._get_var_name(f'${{{variable_name}}}')
-        value = BuiltIn()._get_var_value(name, [plaintext])
-        BuiltIn()._variables.set_test(name, value)
+        name = self.builtin._get_var_name(f'${{{variable_name}}}')
+        value = self.builtin._get_var_value(name, [plaintext])
+        self.builtin._variables.set_test(name, value)
 
     def get_decrypted_text(self, cipher_text):
         """Decrypts cipher text and returns the plain text."""
@@ -160,13 +162,26 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         """Disables the logging of robot framework until ``Suppress Logging    False`` has been called."""
         if disable:
             logger.info('disable logging...')
-            self.original_log_level = BuiltIn().set_log_level('NONE')
+            self.original_log_level = self.builtin.set_log_level('NONE')
         else:
-            BuiltIn().set_log_level(self.original_log_level)
+            self.builtin.set_log_level(self.original_log_level)
             logger.info('enable logging...')
             logger.debug(f'Switching Loglevel from NONE to {self.original_log_level}.')
+
+    def _start_test(self, test, result):
+        self._decrypt_variable_in_scope(self.builtin.set_test_variable)
+        pass
+
+    def _decrypt_variable_in_scope(self, set_scope_variable):
+        if self.variable_decryption:
+            variables = self.builtin.get_variables()
+            for var in variables:
+                value = self.builtin.get_variable_value(var)
+                if isinstance(value, str) and re.fullmatch(self.crypto.CIPHER_PATTERN, value):
+                    plain = self.get_decrypted_text(value)
+                    set_scope_variable(var, plain)
 
     def _log_message(self, message):
         if self.value_list:
             pattern = re.compile("|".join(self.value_list))
-            message.message: message.message = pattern.sub('***', message.message)
+            message.message = pattern.sub('***', message.message)

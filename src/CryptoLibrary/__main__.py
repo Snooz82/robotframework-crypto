@@ -68,9 +68,10 @@ class Encrypter(object):
             print('No public Key found!')
         else:
             answer = prompt(questions, style=self.style)
-            print('encrypted password:')
+            print('Encrypted password: (use inlc. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
             print(cipher_text)
+            print()
         self.main_menu()
 
     def decrypt(self):  # 2
@@ -96,6 +97,7 @@ class Encrypter(object):
         crypto.import_private_key_from_file()
         password = crypto.decrypt_text(answer['cipher_text'])
         print(f'Your password is: {password}')
+        print()
         self.main_menu()
 
     def open_config(self):  # 3
