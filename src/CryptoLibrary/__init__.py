@@ -130,7 +130,13 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
     ROBOT_LISTENER_API_VERSION = 3
 
     def __init__(self, password=None, variable_decryption=False):
-        """Password for private key can be given as argument."""
+        """
++--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| **password:**            | Password for private key can be given as argument.                                                                                      |
++--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+| **variable_decryption:** | If set to ``True`` all variables that are available on Test Case start, that contain a encrypted text, will be decrypted automatically. |
++--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+        """
         self.ROBOT_LIBRARY_LISTENER = self
         self.value_list = list()
         self.crypto = CryptoUtility()
@@ -170,7 +176,6 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
 
     def _start_test(self, test, result):
         self._decrypt_variable_in_scope(self.builtin.set_test_variable)
-        pass
 
     def _decrypt_variable_in_scope(self, set_scope_variable):
         if self.variable_decryption:
