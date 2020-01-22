@@ -147,6 +147,11 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
 
+    def conceal_logs_for_password(self, plaintext):
+        """Conceal logs for the password passed as input."""
+        logger.info(f'Conceal logs for the password passed as input')
+        self.value_list.append(plaintext)
+
     def decrypt_text_to_variable(self, variable_name, cipher_text):
         """Decrypts cipher_text and stores the decrypted plain text into a scalar variable.
         Variable would be i.e. ${variable_name}"""
