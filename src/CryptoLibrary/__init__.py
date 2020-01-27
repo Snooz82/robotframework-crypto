@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.1.0'
+__version__ = '0.2.0'
 
 
 class CryptoLibrary(object):
@@ -147,15 +147,9 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
 
-    def decrypt_text_to_variable(self, variable_name, cipher_text):
-        """Decrypts cipher_text and stores the decrypted plain text into a scalar variable.
-        Variable would be i.e. ${variable_name}"""
-        logger.info(f'Decrypting text into variable ${{{variable_name}}}')
-        plaintext = self.crypto.decrypt_text(cipher_text)
-        self.value_list.append(plaintext)
-        name = self.builtin._get_var_name(f'${{{variable_name}}}')
-        value = self.builtin._get_var_value(name, [plaintext])
-        self.builtin._variables.set_test(name, value)
+    def _decrypt_text_to_variable(self, variable_name, cipher_text):
+        """Keyword Deleted in Version 0.2.0"""
+        raise NotImplementedError('Do not use this Keyword. Use `Get Decrypted Text` instead.')
 
     def get_decrypted_text(self, cipher_text):
         """Decrypts cipher text and returns the plain text."""
@@ -176,6 +170,9 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
 
     def _start_test(self, test, result):
         self._decrypt_variable_in_scope(self.builtin.set_test_variable)
+
+    def _start_suite(self, suite, result):
+        self._decrypt_variable_in_scope(self.builtin.set_suite_variable)
 
     def _decrypt_variable_in_scope(self, set_scope_variable):
         if self.variable_decryption:
