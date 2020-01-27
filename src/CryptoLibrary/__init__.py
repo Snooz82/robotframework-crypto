@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 
 class CryptoLibrary(object):
@@ -162,7 +162,7 @@ Feel free to make a pull Request to improve docs or write some tests for it.
     def __init__(self, password=None, variable_decryption=False):
         """
 +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **password:**            | Password for private key can be given as argument.                                                                                                       |
+| **password:**            | Password for private key can be given as argument. This should be stored as secret! use environment variables instead of hard coding it here.            |
 +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start, that contain a encrypted text, will be decrypted automatically. |
 +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
