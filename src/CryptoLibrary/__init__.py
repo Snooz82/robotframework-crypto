@@ -65,7 +65,7 @@ Passwords, personal data, etc.
 you can use ``python -m CryptoClient`` on you computer where you want to encrypt data.
 Encrypted Data will look like this:
 
-``tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5``
+``crypt:tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5``
 
 this encrypted data can now be decrypted with CryptoLibrary within RobotFramework.
 
@@ -95,8 +95,8 @@ Usage in Test
 
     *** Variables ***
     ${secret}=     KILL ALL HUMANS!!!
-    ${enc_user}=   nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=
-    ${enc_pwd}=    TVpamLXCtrzRsl8UAgD0YuoY+lSJNV73+bTYhOP51zM1GQihgyCvSZ2CoGoKsUHLFjokyJLHxFzPEB4=
+    ${enc_user}=   crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=
+    ${enc_pwd}=    crypt:TVpamLXCtrzRsl8UAgD0YuoY+lSJNV73+bTYhOP51zM1GQihgyCvSZ2CoGoKsUHLFjokyJLHxFzPEB4=
 
     *** Test Cases ***
     Valid Login
@@ -119,9 +119,39 @@ Usage in Test
 in this case the decryption password for the private key.
 It can also be saved on test env persistently as a hash.
 
+|
 
-THIS IS JUST AN ALPHA VERSION !!11!!1
--------------------------------------
+SeleniumLibrary Plugin
+----------------------
+
+CryptoLibrary.Plugin is a SeleniumLibrary Plugin.
+When taken into usage, the ``Input Password`` Keyword can now handle decrypted cipher texts as well.
+
+Example:
+
+.. code :: robotframework
+
+    *** Settings ***
+    Library    SeleniumLibrary    plugins=CryptoLibrary.Plugin
+
+
+    *** Variables ***
+    ${Admins-Password}=    crypt:fQ5Iqn/j2lN8rXwimyz0JXlYzD0gTsPRwb0YJ3YSvDchkvDpfwYDmhHxsZ2i7bIQDlsWKJVhBb+Dz4w=
+
+
+    *** Test Cases ***
+    Decrypt as Plugin
+        Open Browser      http://www.keyword-driven.de
+        Input Text        input_username    admin
+        Input Password    input_password    ${Admins-Password}
+
+|
+
+THIS IS STILL AN ALPHA VERSION !!11!!1 ;-)
+------------------------------------------
+
+Feel free to make a pull Request to improve docs or write some tests for it.
+
     """
 
     ROBOT_LIBRARY_DOC_FORMAT = 'reST'
@@ -131,11 +161,11 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
 
     def __init__(self, password=None, variable_decryption=False):
         """
-+--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| **password:**            | Password for private key can be given as argument.                                                                                      |
-+--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
-| **variable_decryption:** | If set to ``True`` all variables that are available on Test Case start, that contain a encrypted text, will be decrypted automatically. |
-+--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **password:**            | Password for private key can be given as argument.                                                                                                       |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start, that contain a encrypted text, will be decrypted automatically. |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
         """
         self.ROBOT_LIBRARY_LISTENER = self
         self.value_list = list()
@@ -147,7 +177,7 @@ THIS IS JUST AN ALPHA VERSION !!11!!1
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
 
-    def _decrypt_text_to_variable(self, variable_name, cipher_text):
+    def decrypt_text_to_variable(self, variable_name, cipher_text):
         """Keyword Deleted in Version 0.2.0"""
         raise NotImplementedError('Do not use this Keyword. Use `Get Decrypted Text` instead.')
 
