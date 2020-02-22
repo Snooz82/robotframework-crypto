@@ -3,7 +3,7 @@ robotframework-crypto
 ===================================================
 
 CryptoLibrary is a library for secure password handling.
-`project page <https://github.com/Snooz82/robotframework-datadriver>`_
+`project page <https://github.com/Snooz82/robotframework-crypto>`_
 
 For more information about Robot Framework, see http://robotframework.org.
 
@@ -30,13 +30,13 @@ How it works
 
 CryptoLibrary uses asymmetric crypto with elliptic curve cryptography to store confidential data securely.
 
-With ``python -m CryptoLibrary`` you can generate a key pair (private and public key) for your test env.
+With ``python -m **CryptoLibrary**`` you can generate a key pair (private and public key) for your test env.
 You will get the public key after generating.
 
 this public key can now be used to encrypt every data you do not want to be public.
 Passwords, personal data, etc.
 
-you can use ``python -m CryptoClient`` on you computer where you want to encrypt data.
+you can use ``python -m **CryptoClient**`` on you computer where you want to encrypt data.
 Encrypted Data will look like this:
 
 ``crypt:tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5``
