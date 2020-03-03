@@ -177,6 +177,11 @@ Feel free to make a pull Request to improve docs or write some tests for it.
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
 
+    def conceal_logs_for_password(self, plaintext):
+        """Conceal logs for the password passed as input."""
+        logger.info(f'Conceal logs for the password passed as input')
+        self.value_list.append(plaintext)
+
     def decrypt_text_to_variable(self, variable_name, cipher_text):
         """Keyword Deleted in Version 0.2.0"""
         raise NotImplementedError('Do not use this Keyword. Use `Get Decrypted Text` instead.')
