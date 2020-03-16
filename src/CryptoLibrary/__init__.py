@@ -17,19 +17,16 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 
 class CryptoLibrary(object):
-    """|
-|
-
-===================================================
+    """===================================================
 robotframework-crypto
 ===================================================
 
 CryptoLibrary is a library for secure password handling.
-`project page <https://github.com/Snooz82/robotframework-datadriver>`_
+`project page <https://github.com/Snooz82/robotframework-crypto>`_
 
 For more information about Robot Framework, see http://robotframework.org.
 
@@ -91,7 +88,8 @@ Usage in Test
 
     *** Settings ***
     Resource    imports.resource
-    Library     CryptoLibrary    ${decryption_password}    #private key which should be secret is also protected by a password
+    Library     CryptoLibrary    %{private_key_password}    variable_decryption=False
+    #private key which should be secret, should also be protected by a password
 
     *** Variables ***
     ${secret}=     KILL ALL HUMANS!!!
@@ -104,20 +102,83 @@ Usage in Test
         Suppress Logging                                  #disable Robot Framework logging
         ${var}=    set Variable   ${secret}
         Log    ${var}
-        Suppress Logging    False                         #disable Robot Framework logging
-        Decrypt Text To Variable    user    ${enc_user}   #puts the decrypted pain text into ${user}
-        ${var2}=    set Variable    ${user}
-        log    ${var2}
+        Unsuppress Logging                                #enable Robot Framework logging
+        ${user}=    Get Decrypted Text    ${enc_user}     #decrypts cipher text and returns plain text
         Input Text      id:input_username    ${user}
         ${password}=    Get Decrypted Text    ${enc_pwd}  #decrypts cipher text and returns plain text
         Input Password    id:input_password    ${password}
         Click Button    id:button_login
         Page Should Contain Element    //a[text()='Logout']
-        Location Should Be    ${BASE-URL}list
         [Teardown]   Close Browser
 
 in this case the decryption password for the private key.
 It can also be saved on test env persistently as a hash.
+
+The parameter **variable_decryption** in the Library call, if set to true it will automatically decode ALL passwords defined in the variables section
+and then ``"Get Decrypted Text"`` isn't needed.
+
+|
+
+Menu walkthrough
+----------------
+
+|
+
+CryptoLibrary Command Line Tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This Command Line tool has to be used to create a key pair.
+It can also show the public key and encrypt or decrypt data.
+
+``python -m CryptoLibrary``::
+
+ ? What do you want to do?  (Use arrow keys)
+   Encrypt
+   Decrypt
+   Open config --->  ? What do you want to do?  (Use arrow keys)
+   Quit                 Configure key pair    ----------------------------------------------------------------------------------------->  ? What do you want to do?  (Use arrow keys)
+                        Configure public key  --->  ? What do you want to do?  (Use arrow keys)                                             Generate key pair
+                        Back                          Set public key from string  --->   ? Input public_key as Base64:  ThePublicKey        Set key pair from file
+                                                      Get public key from string  --->   Public Key: ThePublicKey                           Set key pair from string
+                                                      Delete public key           --->   ? Do you really want to delete public key?         Delete key pair
+                                                      Back                                                                                  Save private key password
+                                                                                                                                            Delete saved password
+                                                                                                                                            Back
+ ? What do you want to do?  (Use arrow keys)
+   Encrypt     ------------------------------------------------------------------->   ? Enter the password to encrypt  YourPassword
+   Decrypt     -----> ? Input encrypted cipher text:  crypt:TheEncryptedPassword      Encrypted password: (use inlc. "crypt:")
+   Open config        ? Enter the password to decrypt  **********
+   Quit               Your password is: YourPassword                                  crypt:TheEncryptedPassword=
+
+To start using the CryptoLibrary, start ``python -m CryptoLibrary`` and choose ``Open config`` -> ``Configure key pair``-> ``Generate key pair``.
+
+This generates the private and public keys in the ``private_key.json`` and ``public_key.key`` files.
+The ``private_key.json`` is needed to decrypt the values on your test server and has to be copied manually or added through the CLI interface.
+See ``Set key pair from...`` above.
+
+Next you can encrypt the values needed on your test server, looking something like ``crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=``
+
+There are two options to decrypt your values in the robot file. When CryptoLibrary is loaded with ``variable_decryption=True``,
+ALL variables defined in that section, will automatically get decrypted.
+When the option is turned off (the default) the keyword ``Get Decrypted Text`` explicitly decrypts specific values.
+
+|
+
+CryptoClient Command Line Tool
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This CryptoClient command line tool is the tool for all test designers that want to encrypt data.
+I can only import and show the public key and encrypt data.
+
+``python -m CryptoClient``::
+
+ ? What do you want to do?  (Use arrow keys)
+   Encrypt     --------------------------------------------------------------------------------------->   ? Enter the password to encrypt  YourPassword
+   Open config -----> ? What do you want to do?  (Use arrow keys)                                           Encrypted password: (use inlc. "crypt:")
+   Quit                 Set public key from string  --->   ? Input public_key as Base64:  ThePublicKey
+                        Get public key from string  --->   Public Key: ThePublicKey                         crypt:TheEncryptedPassword
+                        Delete public key           --->   ? Do you really want to delete public key?
+                        Back
 
 |
 
@@ -147,9 +208,11 @@ Example:
 
 |
 
-THIS IS STILL AN ALPHA VERSION !!11!!1 ;-)
-------------------------------------------
+This is still a Proof of Concept !!11!!1 ;-)
+--------------------------------------------
 
+It may happen that keywords changes.
+i try not to do, but it can happen.
 Feel free to make a pull Request to improve docs or write some tests for it.
 
     """
@@ -161,11 +224,12 @@ Feel free to make a pull Request to improve docs or write some tests for it.
 
     def __init__(self, password=None, variable_decryption=False):
         """
-+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **password:**            | Password for private key can be given as argument. This should be stored as secret! use environment variables instead of hard coding it here.            |
-+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start, that contain a encrypted text, will be decrypted automatically. |
-+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | **password:**            | Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.            |
+        +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start,                                                                 |
+        |                          | that contain a encrypted text, will be decrypted automatically.                                                                                          |
+        +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
         """
         self.ROBOT_LIBRARY_LISTENER = self
         self.value_list = list()
@@ -177,24 +241,33 @@ Feel free to make a pull Request to improve docs or write some tests for it.
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
 
-    def conceal_logs_for_password(self, plaintext):
-        """Conceal logs for the password passed as input."""
-        logger.info(f'Conceal logs for the password passed as input')
-        self.value_list.append(plaintext)
+    def conceal_text_in_logs(self, text):
+        """This keyword conceals the password, passed as input, in the logs.
+        Only ``***`` will be shown in the logs.
 
-    def decrypt_text_to_variable(self, variable_name, cipher_text):
-        """Keyword Deleted in Version 0.2.0"""
-        raise NotImplementedError('Do not use this Keyword. Use `Get Decrypted Text` instead.')
+        Because CrytoLibrary is a global Library, this text will be hidden from the point
+        where it is concealed until robot execution ends.
+        Earlier appearances will be visible in the logs!"""
+        logger.info(f'Conceal the text in the logs.')
+        self.value_list.append(text)
 
     def get_decrypted_text(self, cipher_text):
-        """Decrypts cipher text and returns the plain text."""
+        """Decrypts cipher text and returns the plain text.
+
+        Example:
+
+        .. code :: robotframework
+
+            ${plain_text}=    Get Decrypted Text    crypt:sZ2i7bIQDlsWKJVhBb+Dz4w=
+
+        """
         logger.info(f'Decrypting text and return value.')
         plaintext = self.crypto.decrypt_text(cipher_text)
         self.value_list.append(plaintext)
         return plaintext
 
     def suppress_logging(self, disable: bool = True):
-        """Disables the logging of robot framework until ``Suppress Logging    False`` has been called."""
+        """Disables the logging of robot framework until ``Unsuppress Logging`` has been called."""
         if disable:
             logger.info('disable logging...')
             self.original_log_level = self.builtin.set_log_level('NONE')
@@ -202,6 +275,10 @@ Feel free to make a pull Request to improve docs or write some tests for it.
             self.builtin.set_log_level(self.original_log_level)
             logger.info('enable logging...')
             logger.debug(f'Switching Loglevel from NONE to {self.original_log_level}.')
+
+    def unsuppress_logging(self):
+        """Enables the logging of robot framework and set it back to the original log level."""
+        self.suppress_logging(False)
 
     def _start_test(self, test, result):
         self._decrypt_variable_in_scope(self.builtin.set_test_variable)
