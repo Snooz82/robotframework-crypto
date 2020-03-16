@@ -185,9 +185,11 @@ Example:
 
 |
 
-THIS IS STILL AN ALPHA VERSION !!11!!1 ;-)
-------------------------------------------
+This is still a Proof of Concept !!11!!1 ;-)
+--------------------------------------------
 
+It may happen that keywords changes.
+i try not to do, but it can happen.
 Feel free to make a pull Request to improve docs or write some tests for it.
 
     

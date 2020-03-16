@@ -17,6 +17,7 @@ setup(
     author="René Rohner(Snooz82)",
     author_email="snooz@posteo.de",
     description="A library for secure password handling.",
+    long_description_content_type="text/x-rst",
     long_description=long_description,
     url="https://github.com/Snooz82/robotframework-crypto",
     package_dir={'': 'src'},

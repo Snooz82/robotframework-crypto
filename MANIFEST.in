@@ -4,3 +4,6 @@ include LICENSE
 
 # added by check_manifest.py
 recursive-include doc *.html
+
+# added by check_manifest.py
+include *.py
