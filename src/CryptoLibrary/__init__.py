@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.2.2'
+__version__ = '0.2.3'
 
 
 class CryptoLibrary(object):
@@ -297,5 +297,5 @@ Feel free to make a pull Request to improve docs or write some tests for it.
 
     def _log_message(self, message):
         if self.value_list:
-            pattern = re.compile("|".join(self.value_list))
+            pattern = re.compile("|".join([re.escape(x) for x in self.value_list]))
             message.message = pattern.sub('***', message.message)
