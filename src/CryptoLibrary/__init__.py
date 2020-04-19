@@ -30,6 +30,8 @@ CryptoLibrary is a library for secure password handling.
 
 For more information about Robot Framework, see http://robotframework.org.
 
+`Keyword Documentation <https://snooz82.github.io/robotframework-crypto/CryptoLibrary.html>`_
+
 |
 
 Installation
