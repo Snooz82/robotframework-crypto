@@ -41,15 +41,17 @@ class CryptoUtility(object):
         if not key_path:
             path, file = os.path.split(os.path.abspath(__file__))
             self.key_path = os.path.join(path, '../keys/')
+        else:
+            self.key_path = key_path
         pass
 
     @property
     def key_path(self):
-        if not os.path.isdir(self._key_path):
-            raise ValueError(f'key_path: "{self.key_path}" is not a valid directory!')
+        if not self._key_path or not os.path.isdir(self._key_path):
+            raise ValueError(f'key_path: "{self._key_path}" is not a valid directory!')
         elif not os.access(self._key_path, os.W_OK | os.X_OK):
             raise PermissionError(f'Permission Denied.'
-                                  f'key_path: "{self.key_path}" is not writeable or not executable.')
+                                  f'key_path: "{self._key_path}" is not writeable or not executable.')
         else:
             return self._key_path
 

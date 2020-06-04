@@ -17,7 +17,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 import re
 
-__version__ = '0.2.3'
+__version__ = '0.2.4'
 
 
 class CryptoLibrary(object):
@@ -121,6 +121,21 @@ and then ``"Get Decrypted Text"`` isn't needed.
 
 |
 
+Importing of CryptoLibrary
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **password:**            | Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.            |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start,                                                                 |
+|                          | that contain a encrypted text, will be decrypted automatically.                                                                                          |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **key_path:**            | A path that defines where the key pair is stored physically.                                                                                             |
+|                          | Path needs to be an absolute path or relative to ``cryptoutility.py``.                                                                                   |
++--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+|
+
 Menu walkthrough
 ----------------
 
@@ -140,7 +155,7 @@ It can also show the public key and encrypt or decrypt data.
    Open config --->  ? What do you want to do?  (Use arrow keys)
    Quit                 Configure key pair    ----------------------------------------------------------------------------------------->  ? What do you want to do?  (Use arrow keys)
                         Configure public key  --->  ? What do you want to do?  (Use arrow keys)                                             Generate key pair
-                        Back                          Set public key from string  --->   ? Input public_key as Base64:  ThePublicKey        Set key pair from file
+                        Back                          Set public key from string  --->   ? Input public_key as Base64:  ThePublicKey        Set key path
                                                       Get public key from string  --->   Public Key: ThePublicKey                           Set key pair from string
                                                       Delete public key           --->   ? Do you really want to delete public key?         Delete key pair
                                                       Back                                                                                  Save private key password
@@ -224,7 +239,7 @@ Feel free to make a pull Request to improve docs or write some tests for it.
     ROBOT_LIBRARY_VERSION = __version__
     ROBOT_LISTENER_API_VERSION = 3
 
-    def __init__(self, password=None, variable_decryption=False):
+    def __init__(self, password=None, variable_decryption=False, key_path=None):
         """
         +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
         | **password:**            | Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.            |
@@ -232,10 +247,13 @@ Feel free to make a pull Request to improve docs or write some tests for it.
         | **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start,                                                                 |
         |                          | that contain a encrypted text, will be decrypted automatically.                                                                                          |
         +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | **key_path:**            | A path that defines where the key pair is stored physically.                                                                                             |
+        |                          | Path needs to be an absolute path or relative to ``cryptoutility.py``.                                                                                   |
+        +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
         """
         self.ROBOT_LIBRARY_LISTENER = self
         self.value_list = list()
-        self.crypto = CryptoUtility()
+        self.crypto = CryptoUtility(key_path)
         self.original_log_level = 'INFO'
         self.disable_logging = False
         if password:
