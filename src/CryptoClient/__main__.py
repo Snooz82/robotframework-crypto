@@ -20,17 +20,6 @@ __version__ = '0.0.3'
 
 class Encrypter(object):
 
-    #def __init__(self):
-        # self.style = style_from_dict({
-        #     Token.QuestionMark: '#fac731 bold',
-        #     Token.Answer: '#06c8ff bold',
-        #     Token.Instruction: '',  # default
-        #     Token.Separator: '#cc5454',
-        #     Token.Selected: '#0abf5b',  # default
-        #     Token.Pointer: '#673ab7 bold',
-        #     Token.Question: '',
-        # })
-
     def main(self):
         self.main_menu()
 
