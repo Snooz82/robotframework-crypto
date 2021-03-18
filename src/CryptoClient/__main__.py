@@ -12,24 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from PyInquirer import style_from_dict, Token, prompt
+from questionary import prompt
 from CryptoLibrary.utils import CryptoUtility
 
-__version__ = '0.0.1'
+__version__ = '0.0.3'
 
 
 class Encrypter(object):
 
-    def __init__(self):
-        self.style = style_from_dict({
-            Token.QuestionMark: '#fac731 bold',
-            Token.Answer: '#06c8ff bold',
-            Token.Instruction: '',  # default
-            Token.Separator: '#cc5454',
-            Token.Selected: '#0abf5b',  # default
-            Token.Pointer: '#673ab7 bold',
-            Token.Question: '',
-        })
+    #def __init__(self):
+        # self.style = style_from_dict({
+        #     Token.QuestionMark: '#fac731 bold',
+        #     Token.Answer: '#06c8ff bold',
+        #     Token.Instruction: '',  # default
+        #     Token.Separator: '#cc5454',
+        #     Token.Selected: '#0abf5b',  # default
+        #     Token.Pointer: '#673ab7 bold',
+        #     Token.Question: '',
+        # })
 
     def main(self):
         self.main_menu()
@@ -44,14 +44,14 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
-        if answer['questions'] == 'Encrypt'.lower():
-            self.encrypt()
-        elif answer['questions'] == 'Open config'.lower():
-            self.configure_public_key()
-        else:
-            print('Bye Bye...')
-            pass
+        answer = prompt(questions)
+        while answer['questions'] != 'quit':
+            if answer['questions'] == 'encrypt':
+                self.encrypt()
+            elif answer['questions'] == 'open config':
+                self.configure_public_key()
+            answer = prompt(questions)
+        print('Bye Bye...')
 
     def encrypt(self):  # 1
         questions = [
@@ -65,10 +65,10 @@ class Encrypter(object):
         if not crypto.import_public_key_from_file():
             print('No public Key found!')
         else:
-            answer = prompt(questions, style=self.style)
+            answer = prompt(questions)
             print('Encrypted password: (use inlc. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
-            print(cipher_text)
+            print(cipher_text, '\n\n')
 
     def configure_public_key(self):  # 3.2
         questions = [
@@ -83,7 +83,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['questions'] == 'Get public key from string'.lower():
             self.get_public_key()
         elif answer['questions'] == 'Set public key from string'.lower():
@@ -105,7 +105,7 @@ class Encrypter(object):
             }
         ]
         crypto = CryptoUtility()
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['public_key'] != '':
             try:
                 crypto.set_public_key(answer['public_key'])
@@ -125,7 +125,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(delete_password, style=self.style)
+        answer = prompt(delete_password)
         if answer['delete_public'] == 'yes':
             crypto = CryptoUtility()
             if crypto.delete_public_key_file():
