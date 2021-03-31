@@ -13,26 +13,16 @@
 # limitations under the License.
 
 import os
-
-from PyInquirer import style_from_dict, Token, prompt
+from questionary import prompt
 from CryptoLibrary.utils import CryptoUtility
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 class Encrypter(object):
 
     def __init__(self):
         self.key_path = None
-        self.style = style_from_dict({
-            Token.QuestionMark: '#fac731 bold',
-            Token.Answer: '#06c8ff bold',
-            Token.Instruction: '',  # default
-            Token.Separator: '#cc5454',
-            Token.Selected: '#0abf5b',  # default
-            Token.Pointer: '#673ab7 bold',
-            Token.Question: '',
-        })
 
     def main(self):
         self.main_menu()
@@ -47,7 +37,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['questions'] == 'Encrypt'.lower():
             self.encrypt()
         elif answer['questions'] == 'Decrypt'.lower():
@@ -70,7 +60,7 @@ class Encrypter(object):
         if not crypto.import_public_key_from_file():
             print('No public Key found!')
         else:
-            answer = prompt(questions, style=self.style)
+            answer = prompt(questions)
             print('Encrypted password: (use inlc. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
             print(cipher_text)
@@ -92,10 +82,10 @@ class Encrypter(object):
                 'message': 'Enter the password of private key to decrypt:'
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         crypto = CryptoUtility(self.key_path)
         if not crypto.password:
-            input_pwd = prompt(input_password, style=self.style)
+            input_pwd = prompt(input_password)
             crypto.password = input_pwd['password']
         crypto.import_private_key_from_file()
         password = crypto.decrypt_text(answer['cipher_text'])
@@ -115,7 +105,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['questions'] == 'Configure key pair'.lower():
             self.configure_key_pair()
         elif answer['questions'] == 'Configure public key'.lower():
@@ -139,7 +129,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['questions'] == 'Generate key pair'.lower():
             self.generate_key_pair()
         elif answer['questions'] == 'Set key path'.lower():
@@ -175,7 +165,7 @@ class Encrypter(object):
         ]
         crypto = CryptoUtility(self.key_path)
 
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
 
         if answer['regenerate'] == 'yes':
             crypto.generate_key_pair()
@@ -210,7 +200,7 @@ class Encrypter(object):
             }
         ]
 
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         key_path = answer['key_path']
         if key_path != '':
             if 'create_dir' in answer and answer['create_dir'] == 'yes':
@@ -263,7 +253,7 @@ class Encrypter(object):
         ]
 
         crypto = CryptoUtility(self.key_path)
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['private_key_store'] != '':
             print('Setting key pair...')
             try:
@@ -271,11 +261,11 @@ class Encrypter(object):
                 if not crypto.set_private_key(answer['private_key_store']):
                     self.configure_key_pair()
 
-                answer = prompt(new_password, style=self.style)
+                answer = prompt(new_password)
                 if answer['new_pwd'] == 'yes':
                     crypto.password = self._set_password()
 
-                answer = prompt(save_password, style=self.style)
+                answer = prompt(save_password)
                 if answer['save_pwd'] == 'yes':
                     crypto.export_password_hash_to_file()
                 else:
@@ -297,7 +287,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(delete_password, style=self.style)
+        answer = prompt(delete_password)
         if answer['delete_keys'] == 'yes':
             crypto = CryptoUtility(self.key_path)
             if crypto.delete_key_store():
@@ -315,7 +305,7 @@ class Encrypter(object):
         crypto = CryptoUtility(self.key_path)
 
         if not crypto.password:
-            input_pwd = prompt(input_password, style=self.style)
+            input_pwd = prompt(input_password)
             crypto.password = input_pwd['password']
             if crypto.import_private_key_from_file():
                 crypto.export_password_hash_to_file()
@@ -336,7 +326,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(delete_password, style=self.style)
+        answer = prompt(delete_password)
         if answer['delete_pwd'] == 'yes':
             crypto = CryptoUtility(self.key_path)
             if crypto.delete_password_hash_file():
@@ -356,7 +346,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['questions'] == 'Get public key from string'.lower():
             self.get_public_key()
         elif answer['questions'] == 'Set public key from string'.lower():
@@ -379,7 +369,7 @@ class Encrypter(object):
             }
         ]
         crypto = CryptoUtility(self.key_path)
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['public_key'] != '':
             try:
                 crypto.set_public_key(answer['public_key'])
@@ -399,7 +389,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(delete_password, style=self.style)
+        answer = prompt(delete_password)
         if answer['delete_public'] == 'yes':
             crypto = CryptoUtility(self.key_path)
             if crypto.delete_public_key_file():
@@ -419,7 +409,7 @@ class Encrypter(object):
                 'name': 'password2'
             }
         ]
-        answer = prompt(questions, style=self.style)
+        answer = prompt(questions)
         if answer['password1'] != answer['password2']:
             print('The entered passwords are not equal. Please retry:')
             password = self._set_password()
