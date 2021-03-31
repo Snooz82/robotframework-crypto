@@ -18,18 +18,20 @@ from questionary import prompt as qprompt
 from CryptoLibrary.utils import CryptoUtility
 from questionary import Style
 
-custom_style_fancy = Style([
-    ('qmark', '#fac731 bold'),
-    ('question', 'bold'),
-    ('answer', '#06c8ff bold italic'),
-    ('pointer', '#673ab7 bold'),
-    ('highlighted', '#34AC5E bold'),
-    ('selected', '#0abf5b'),
-    ('separator', '#cc5454'),
-    ('instruction', ''),
-    ('text', ''),
-    ('disabled', '#858585 italic')
-])
+custom_style_fancy = Style(
+    [
+        ('qmark', '#fac731 bold'),
+        ('question', 'bold'),
+        ('answer', '#06c8ff bold italic'),
+        ('pointer', '#673ab7 bold'),
+        ('highlighted', '#34AC5E bold'),
+        ('selected', '#0abf5b'),
+        ('separator', '#cc5454'),
+        ('instruction', ''),
+        ('text', ''),
+        ('disabled', '#858585 italic'),
+    ]
+)
 
 
 def prompt(questions):
@@ -40,7 +42,6 @@ __version__ = '0.0.3'
 
 
 class Encrypter(object):
-
     def __init__(self):
         self.key_path = None
 
@@ -54,7 +55,7 @@ class Encrypter(object):
                 'name': 'questions',
                 'message': 'What do you want to do?',
                 'choices': ['Encrypt', 'Decrypt', 'Open config', 'Quit'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions)
@@ -70,11 +71,7 @@ class Encrypter(object):
 
     def encrypt(self):  # 1
         questions = [
-            {
-                'type': 'password',
-                'message': 'Enter the string to be encrypted:',
-                'name': 'password'
-            }
+            {'type': 'password', 'message': 'Enter the string to be encrypted:', 'name': 'password'}
         ]
         crypto = CryptoUtility(self.key_path)
         if not crypto.import_public_key_from_file():
@@ -97,7 +94,7 @@ class Encrypter(object):
             {
                 'type': 'password',
                 'name': 'password',
-                'message': 'Enter the password of private key to decrypt:'
+                'message': 'Enter the password of private key to decrypt:',
             }
         ]
         answer = prompt(questions)
@@ -117,10 +114,8 @@ class Encrypter(object):
                 'type': 'list',
                 'name': 'questions',
                 'message': 'What do you want to do?',
-                'choices': ['Configure key pair',
-                            'Configure public key',
-                            'Back'],
-                'filter': lambda val: val.lower()
+                'choices': ['Configure key pair', 'Configure public key', 'Back'],
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions)
@@ -135,14 +130,16 @@ class Encrypter(object):
                 'type': 'list',
                 'name': 'questions',
                 'message': 'What do you want to do?',
-                'choices': ['Generate key pair',
-                            'Set key path',
-                            'Set key pair from string',
-                            'Delete key pair',
-                            'Save private key password',
-                            'Delete saved password',
-                            'Back'],
-                'filter': lambda val: val.lower()
+                'choices': [
+                    'Generate key pair',
+                    'Set key path',
+                    'Set key pair from string',
+                    'Delete key pair',
+                    'Save private key password',
+                    'Delete saved password',
+                    'Back',
+                ],
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions)
@@ -168,7 +165,7 @@ class Encrypter(object):
                 'name': 'regenerate',
                 'message': 'Do you want to regenerate the key pair?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             },
             {
                 'type': 'list',
@@ -176,8 +173,8 @@ class Encrypter(object):
                 'message': 'Do you want save password?',
                 'choices': ['Yes', 'No'],
                 'filter': lambda val: val.lower(),
-                'when': lambda answer: answer['regenerate'] == 'yes'
-            }
+                'when': lambda answer: answer['regenerate'] == 'yes',
+            },
         ]
         crypto = CryptoUtility(self.key_path)
 
@@ -212,8 +209,8 @@ class Encrypter(object):
                 'message': 'Directory does not exist, do you want to create it?',
                 'choices': ['Yes', 'No'],
                 'when': lambda answer: not os.path.isdir(answer['key_path']),
-                'filter': lambda val: val.lower()
-            }
+                'filter': lambda val: val.lower(),
+            },
         ]
 
         answer = prompt(questions)
@@ -228,8 +225,10 @@ class Encrypter(object):
             if not os.path.isdir(key_path):
                 print(f'key_path: "{key_path}" is not a valid directory!')
             elif not os.access(key_path, os.W_OK | os.X_OK):
-                print(f'Permission Denied.'
-                      f'key_path: "{key_path}" is not writeable or not executable.')
+                print(
+                    f'Permission Denied.'
+                    f'key_path: "{key_path}" is not writeable or not executable.'
+                )
             self.key_path = key_path
         self.configure_key_pair()
 
@@ -244,8 +243,8 @@ class Encrypter(object):
                 'type': 'password',
                 'message': 'Enter the password to decrypt private key:',
                 'name': 'password',
-                'when': lambda answer: answer['private_key_store'] != ''
-            }
+                'when': lambda answer: answer['private_key_store'] != '',
+            },
         ]
 
         new_password = [
@@ -254,7 +253,7 @@ class Encrypter(object):
                 'name': 'new_pwd',
                 'message': 'Do you want set a new password?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
 
@@ -264,7 +263,7 @@ class Encrypter(object):
                 'name': 'save_pwd',
                 'message': 'Do you want to save password?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
 
@@ -300,7 +299,7 @@ class Encrypter(object):
                 'name': 'delete_keys',
                 'message': 'Do you really want to delete key pair?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(delete_password)
@@ -315,7 +314,7 @@ class Encrypter(object):
             {
                 'type': 'password',
                 'name': 'password',
-                'message': 'Enter the password to decrypt private key:'
+                'message': 'Enter the password to decrypt private key:',
             }
         ]
         crypto = CryptoUtility(self.key_path)
@@ -339,7 +338,7 @@ class Encrypter(object):
                 'name': 'delete_pwd',
                 'message': 'Do you really want to delete saved password?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(delete_password)
@@ -355,11 +354,13 @@ class Encrypter(object):
                 'type': 'list',
                 'name': 'questions',
                 'message': 'What do you want to do?',
-                'choices': ['Set public key from string',
-                            'Get public key from string',
-                            'Delete public key',
-                            'Back'],
-                'filter': lambda val: val.lower()
+                'choices': [
+                    'Set public key from string',
+                    'Get public key from string',
+                    'Delete public key',
+                    'Back',
+                ],
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions)
@@ -402,7 +403,7 @@ class Encrypter(object):
                 'name': 'delete_public',
                 'message': 'Do you really want to delete public key?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(delete_password)
@@ -417,13 +418,13 @@ class Encrypter(object):
             {
                 'type': 'password',
                 'message': 'Enter the password to secure the private key:',
-                'name': 'password1'
+                'name': 'password1',
             },
             {
                 'type': 'password',
                 'message': 'Reenter the password to secure the private key:',
-                'name': 'password2'
-            }
+                'name': 'password2',
+            },
         ]
         answer = prompt(questions)
         if answer['password1'] != answer['password2']:

@@ -6,7 +6,6 @@ import re
 
 
 class Plugin(LibraryComponent):
-
     def __init__(self, ctx):
         self.crypto = CryptoUtility()
         LibraryComponent.__init__(self, ctx)

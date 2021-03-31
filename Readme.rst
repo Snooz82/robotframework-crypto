@@ -1,3 +1,4 @@
+
 ===================================================
 robotframework-crypto
 ===================================================
@@ -32,18 +33,20 @@ How it works
 
 CryptoLibrary uses asymmetric crypto with elliptic curve cryptography to store confidential data securely.
 
-With ``python -m CryptoLibrary`` you can generate a key pair (private and public key) for your test env.
+With the command ``CryptoLibrary`` in console/terminal you can generate a key pair
+(private and public key) for your test env.
 You will get the public key after generating.
 
-this public key can now be used to encrypt every data you do not want to be public.
+This public key can now be used to encrypt every data you do not want to be public.
 Passwords, personal data, etc.
 
-you can use ``python -m CryptoClient`` on you computer where you want to encrypt data.
+You can use the command``CryptoClient`` on you computer where you want to encrypt data.
+
 Encrypted Data will look like this:
 
 ``crypt:tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5``
 
-this encrypted data can now be decrypted with CryptoLibrary within RobotFramework.
+This encrypted data can now be decrypted with CryptoLibrary within Robot Framework.
 
 CryptoLibrary need the private_key_store.json for this.
 This is what is generated as key pair.
@@ -202,11 +205,8 @@ Example:
 
 |
 
-This is still a Proof of Concept !!11!!1 ;-)
---------------------------------------------
 
 It may happen that keywords changes.
-i try not to do, but it can happen.
+i try not to do, but it can happen in major releases.
 Feel free to make a pull Request to improve docs or write some tests for it.
 
-    

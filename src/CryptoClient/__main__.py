@@ -16,24 +16,25 @@ from questionary import prompt, print
 from CryptoLibrary.utils import CryptoUtility
 from questionary import Style
 
-custom_style_fancy = Style([
-    ('qmark', '#fac731 bold'),
-    ('question', 'bold'),
-    ('answer', '#06c8ff bold italic'),
-    ('pointer', '#673ab7 bold'),
-    ('highlighted', '#34AC5E bold'),
-    ('selected', '#0abf5b'),
-    ('separator', '#cc5454'),
-    ('instruction', ''),
-    ('text', ''),
-    ('disabled', '#858585 italic')
-])
+custom_style_fancy = Style(
+    [
+        ('qmark', '#fac731 bold'),
+        ('question', 'bold'),
+        ('answer', '#06c8ff bold italic'),
+        ('pointer', '#673ab7 bold'),
+        ('highlighted', '#34AC5E bold'),
+        ('selected', '#0abf5b'),
+        ('separator', '#cc5454'),
+        ('instruction', ''),
+        ('text', ''),
+        ('disabled', '#858585 italic'),
+    ]
+)
 
 __version__ = '0.0.3'
 
 
 class Encrypter(object):
-
     def main(self):
         self.main_menu()
 
@@ -44,7 +45,7 @@ class Encrypter(object):
                 'name': 'questions',
                 'message': 'What do you want to do?',
                 'choices': ['Encrypt', 'Open config', 'Quit'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions, style=custom_style_fancy)
@@ -58,11 +59,7 @@ class Encrypter(object):
 
     def encrypt(self):  # 1
         questions = [
-            {
-                'type': 'password',
-                'message': 'Enter the password to encrypt',
-                'name': 'password'
-            }
+            {'type': 'password', 'message': 'Enter the password to encrypt', 'name': 'password'}
         ]
         crypto = CryptoUtility()
         if not crypto.import_public_key_from_file():
@@ -79,11 +76,13 @@ class Encrypter(object):
                 'type': 'list',
                 'name': 'questions',
                 'message': 'What do you want to do?',
-                'choices': ['Set public key from string',
-                            'Get public key from string',
-                            'Delete public key',
-                            'Back'],
-                'filter': lambda val: val.lower()
+                'choices': [
+                    'Set public key from string',
+                    'Get public key from string',
+                    'Delete public key',
+                    'Back',
+                ],
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(questions, style=custom_style_fancy)
@@ -123,7 +122,7 @@ class Encrypter(object):
                 'name': 'delete_public',
                 'message': 'Do you really want to delete public key?',
                 'choices': ['Yes', 'No'],
-                'filter': lambda val: val.lower()
+                'filter': lambda val: val.lower(),
             }
         ]
         answer = prompt(delete_password, style=custom_style_fancy)

@@ -50,8 +50,10 @@ class CryptoUtility(object):
         if not self._key_path or not os.path.isdir(self._key_path):
             raise ValueError(f'key_path: "{self._key_path}" is not a valid directory!')
         elif not os.access(self._key_path, os.W_OK | os.X_OK):
-            raise PermissionError(f'Permission Denied.'
-                                  f'key_path: "{self._key_path}" is not writeable or not executable.')
+            raise PermissionError(
+                f'Permission Denied.'
+                f'key_path: "{self._key_path}" is not writeable or not executable.'
+            )
         else:
             return self._key_path
 
@@ -65,8 +67,9 @@ class CryptoUtility(object):
         if not os.path.isdir(key_path):
             raise ValueError(f'key_path: "{key_path}" is not a valid directory!')
         elif not os.access(key_path, os.W_OK | os.X_OK):
-            raise PermissionError(f'Permission Denied.'
-                                  f'key_path: "{key_path}" is not writeable or not executable.')
+            raise PermissionError(
+                f'Permission Denied.' f'key_path: "{key_path}" is not writeable or not executable.'
+            )
         else:
             self._key_path = key_path
             self.private_key_store = os.path.join(self.key_path, self.PRIVATE_KEY_FILE)
@@ -149,7 +152,9 @@ class CryptoUtility(object):
         elif not self.key_path:
             raise ValueError('No valid path found.')
         else:
-            return self._write_dict_as_json_file({'password_hash': self.password}, self.password_hash_file)
+            return self._write_dict_as_json_file(
+                {'password_hash': self.password}, self.password_hash_file
+            )
 
     def _import_password_hash_from_file(self, silent=False):
         if not self.key_path:
@@ -164,7 +169,9 @@ class CryptoUtility(object):
         if not self.public_key:
             raise ValueError('No public key found to export. Generate or set public key first!')
         else:
-            return self._write_bytes_as_b64_to_file(self.public_key._public_key, self.public_key_file)
+            return self._write_bytes_as_b64_to_file(
+                self.public_key._public_key, self.public_key_file
+            )
 
     def import_public_key_from_file(self):
         try:
@@ -179,18 +186,24 @@ class CryptoUtility(object):
 
     def export_private_key_to_file(self):
         if not self.private_key:
-            raise AttributeError('No private key found to export. Generate or set private key first!')
+            raise AttributeError(
+                'No private key found to export. Generate or set private key first!'
+            )
         else:
             salt = utils.random(pwhash.argon2i.SALTBYTES)
-            secure_key = pwhash.argon2i.kdf(secret.SecretBox.KEY_SIZE,
-                                            Base64Encoder.decode(self.password),
-                                            salt,
-                                            opslimit=self.ops,
-                                            memlimit=self.mem)
-            private_key_store = {'private_key': self._encrypt_private_key(secure_key),
-                                 'salt': self._base64(salt),
-                                 'ops': self.ops,
-                                 'mem': self.mem}
+            secure_key = pwhash.argon2i.kdf(
+                secret.SecretBox.KEY_SIZE,
+                Base64Encoder.decode(self.password),
+                salt,
+                opslimit=self.ops,
+                memlimit=self.mem,
+            )
+            private_key_store = {
+                'private_key': self._encrypt_private_key(secure_key),
+                'salt': self._base64(salt),
+                'ops': self.ops,
+                'mem': self.mem,
+            }
             return self._write_dict_as_json_file(private_key_store, self.private_key_store)
 
     def import_private_key_from_file(self):
@@ -204,11 +217,13 @@ class CryptoUtility(object):
     def _decrypt_and_set_private_key(self, private_key_store):
         if not self.password:
             raise AttributeError('No password found! Password must be set ahead!')
-        secure_key = pwhash.argon2i.kdf(secret.SecretBox.KEY_SIZE,
-                                        Base64Encoder.decode(self.password),
-                                        Base64Encoder.decode(private_key_store['salt']),
-                                        opslimit=private_key_store['ops'],
-                                        memlimit=private_key_store['mem'])
+        secure_key = pwhash.argon2i.kdf(
+            secret.SecretBox.KEY_SIZE,
+            Base64Encoder.decode(self.password),
+            Base64Encoder.decode(private_key_store['salt']),
+            opslimit=private_key_store['ops'],
+            memlimit=private_key_store['mem'],
+        )
         encrypted = Base64Encoder.decode(private_key_store['private_key'])
         box = secret.SecretBox(secure_key)
         try:
@@ -232,7 +247,9 @@ class CryptoUtility(object):
         if not self.private_key:
             self.import_private_key_from_file()
         if not self.private_key:
-            raise AttributeError('No private key known or found in file. Generate private key first!')
+            raise AttributeError(
+                'No private key known or found in file. Generate private key first!'
+            )
         else:
             unseal_box = SealedBox(self.private_key)
             if re.fullmatch(self.CIPHER_PATTERN, cipher_text):
