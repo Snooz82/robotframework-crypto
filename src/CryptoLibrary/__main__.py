@@ -61,7 +61,7 @@ class Encrypter(object):
             print('No public Key found!')
         else:
             answer = prompt(questions)
-            print('Encrypted password: (use inlc. "crypt:")\n')
+            print('Encrypted password: (use incl. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
             print(cipher_text)
             print()

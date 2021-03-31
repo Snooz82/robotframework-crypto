@@ -14,6 +14,20 @@
 
 from questionary import prompt
 from CryptoLibrary.utils import CryptoUtility
+from questionary import Style
+
+custom_style_fancy = Style([
+    ('qmark', '#fac731 bold'),           # token in front of the question
+    ('question', ''),                    # question text
+    ('answer', '#06c8ff bold'),          # submitted answer text behind the question
+    ('pointer', '#673ab7 bold'),         # pointer used in select and checkbox prompts
+    ('highlighted', 'fg:#673ab7 bold'),  # pointed-at choice in select and checkbox prompts
+    ('selected', '#0abf5b'),             # style for a selected item of a checkbox
+    ('separator', '#cc5454'),            # separator in lists
+    ('instruction', ''),                 # user instructions for select, rawselect, checkbox
+    ('text', ''),                        # plain text
+    ('disabled', 'fg:#858585 italic')    # disabled choices for select and checkbox prompts
+])
 
 __version__ = '0.0.3'
 
@@ -33,13 +47,13 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions)
+        answer = prompt(questions, style=custom_style_fancy)
         while answer['questions'] != 'quit':
             if answer['questions'] == 'encrypt':
                 self.encrypt()
             elif answer['questions'] == 'open config':
                 self.configure_public_key()
-            answer = prompt(questions)
+            answer = prompt(questions, style=custom_style_fancy)
         print('Bye Bye...')
 
     def encrypt(self):  # 1
@@ -54,8 +68,8 @@ class Encrypter(object):
         if not crypto.import_public_key_from_file():
             print('No public Key found!')
         else:
-            answer = prompt(questions)
-            print('Encrypted password: (use inlc. "crypt:")\n')
+            answer = prompt(questions, style=custom_style_fancy)
+            print('Encrypted password: (use incl. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
             print(cipher_text, '\n\n')
 
@@ -72,15 +86,14 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(questions)
+        answer = prompt(questions, style=custom_style_fancy)
         if answer['questions'] == 'Get public key from string'.lower():
             self.get_public_key()
         elif answer['questions'] == 'Set public key from string'.lower():
             self.set_public_key_from_string()
         elif answer['questions'] == 'Delete public key'.lower():
             self.delete_public_key()
-        else:
-            self.main_menu()
+
 
     def get_public_key(self):  # 3.2.1
         self._show_public_key()
@@ -94,7 +107,7 @@ class Encrypter(object):
             }
         ]
         crypto = CryptoUtility()
-        answer = prompt(questions)
+        answer = prompt(questions, style=custom_style_fancy)
         if answer['public_key'] != '':
             try:
                 crypto.set_public_key(answer['public_key'])
@@ -114,7 +127,7 @@ class Encrypter(object):
                 'filter': lambda val: val.lower()
             }
         ]
-        answer = prompt(delete_password)
+        answer = prompt(delete_password, style=custom_style_fancy)
         if answer['delete_public'] == 'yes':
             crypto = CryptoUtility()
             if crypto.delete_public_key_file():
