@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from questionary import prompt
+from questionary import prompt, print
 from CryptoLibrary.utils import CryptoUtility
 from questionary import Style
 
 custom_style_fancy = Style([
-    ('qmark', '#fac731 bold'),           # token in front of the question
-    ('question', ''),                    # question text
-    ('answer', '#06c8ff bold'),          # submitted answer text behind the question
-    ('pointer', '#673ab7 bold'),         # pointer used in select and checkbox prompts
-    ('highlighted', 'fg:#673ab7 bold'),  # pointed-at choice in select and checkbox prompts
-    ('selected', '#0abf5b'),             # style for a selected item of a checkbox
-    ('separator', '#cc5454'),            # separator in lists
-    ('instruction', ''),                 # user instructions for select, rawselect, checkbox
-    ('text', ''),                        # plain text
-    ('disabled', 'fg:#858585 italic')    # disabled choices for select and checkbox prompts
+    ('qmark', '#fac731 bold'),
+    ('question', 'bold'),
+    ('answer', '#06c8ff bold italic'),
+    ('pointer', '#673ab7 bold'),
+    ('highlighted', '#34AC5E bold'),
+    ('selected', '#0abf5b'),
+    ('separator', '#cc5454'),
+    ('instruction', ''),
+    ('text', ''),
+    ('disabled', '#858585 italic')
 ])
 
 __version__ = '0.0.3'
@@ -71,7 +71,7 @@ class Encrypter(object):
             answer = prompt(questions, style=custom_style_fancy)
             print('Encrypted password: (use incl. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
-            print(cipher_text, '\n\n')
+            print(f"{cipher_text}\n", style='bold blink #06c8ff')
 
     def configure_public_key(self):  # 3.2
         questions = [
@@ -93,7 +93,6 @@ class Encrypter(object):
             self.set_public_key_from_string()
         elif answer['questions'] == 'Delete public key'.lower():
             self.delete_public_key()
-
 
     def get_public_key(self):  # 3.2.1
         self._show_public_key()
@@ -137,8 +136,7 @@ class Encrypter(object):
         crypto = CryptoUtility()
         key = crypto.import_public_key_from_file()
         if key:
-            print(f'Public Key: {key}')
-            print()
+            print(f'Public Key: {key}\n')
 
 
 if __name__ == "__main__":

@@ -32,6 +32,11 @@ setup(
         "Topic :: Software Development :: Testing :: Acceptance",
         "Framework :: Robot Framework",
     ],
-    install_requires=['robotframework >= 3.1', 'PyNaCl >= 1.3.0', 'questionary>=1.9'],
-    python_requires='>=3.6'
+    install_requires=[
+        'robotframework >= 3.2.2',
+        'PyNaCl >= 1.4.0',
+        'questionary>=1.9.0'],
+    python_requires='>=3.6',
+    entry_points={'console_scripts': ['CryptoLibrary = CryptoLibrary:main',
+                                      'CryptoClient = CryptoClient:main']}
 )
