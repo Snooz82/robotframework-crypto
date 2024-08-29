@@ -325,3 +325,9 @@ class CryptoLibrary(object):
         if self.value_list:
             pattern = re.compile("|".join([re.escape(x) for x in self.value_list]))
             message.message = pattern.sub('***', message.message)
+
+    def _start_for_iteration(self, data, result):
+        if self.value_list:
+            pattern = re.compile("|".join([re.escape(x) for x in self.value_list]))
+            for key in result.assign.keys():
+                result.assign[key] = pattern.sub('***', result.assign[key])
