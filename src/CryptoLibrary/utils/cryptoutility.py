@@ -21,7 +21,6 @@ from nacl.public import PrivateKey, PublicKey, SealedBox
 
 
 class CryptoUtility(object):
-
     PRIVATE_KEY_FILE = 'private_key.json'
     PUBLIC_KEY_FILE = 'public_key.key'
     PASSWORD_HASH_FILE = 'password_hash.json'

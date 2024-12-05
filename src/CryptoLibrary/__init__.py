@@ -18,7 +18,7 @@ from robot.api import logger
 from CryptoLibrary.__main__ import Encrypter
 import re
 
-__version__ = '0.3.0'
+__version__ = '0.4.0'
 
 
 def main():
@@ -323,5 +323,13 @@ class CryptoLibrary(object):
 
     def _log_message(self, message):
         if self.value_list:
-            pattern = re.compile("|".join([re.escape(x) for x in self.value_list]))
+            pattern = re.compile('|'.join([re.escape(x) for x in self.value_list]))
+            assignment_match = re.fullmatch(
+                r'(?P<var>[\$@&]\{[^\}]*\})\s*=\s*(?P<value>.*)', message.message
+            )
+            if assignment_match:
+                variable_value = self.builtin.get_variable_value(assignment_match.group('var'))
+                if pattern.search(repr(variable_value)) or pattern.search(str(variable_value)):
+                    message.message = f'{assignment_match.group('var')} = "***"'
+                    return
             message.message = pattern.sub('***', message.message)

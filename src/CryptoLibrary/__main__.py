@@ -71,7 +71,11 @@ class Encrypter(object):
 
     def encrypt(self):  # 1
         questions = [
-            {'type': 'password', 'message': 'Enter the string to be encrypted:', 'name': 'password'}
+            {
+                'type': 'password',
+                'message': 'Enter the string to be encrypted:',
+                'name': 'password',
+            }
         ]
         crypto = CryptoUtility(self.key_path)
         if not crypto.import_public_key_from_file():
@@ -80,7 +84,7 @@ class Encrypter(object):
             answer = prompt(questions)
             qprint('Encrypted password: (use incl. "crypt:")\n', style='#06c8ff')
             cipher_text = crypto.encrypt_text(answer['password'])
-            qprint(f"{cipher_text}\n", style='bold #06c8ff')
+            qprint(f'{cipher_text}\n', style='bold #06c8ff')
 
     def decrypt(self):  # 2
         questions = [
@@ -102,7 +106,7 @@ class Encrypter(object):
         if not crypto.password:
             input_pwd = prompt(input_password)
             crypto.password = input_pwd['password']
-        print(f' Decrypting...', end="\r")
+        print(f' Decrypting...', end='\r')
         crypto.import_private_key_from_file()
         password = crypto.decrypt_text(answer['cipher_text'])
         qprint(f'Your password is:', style='#06c8ff', flush=True)
@@ -444,5 +448,5 @@ class Encrypter(object):
             print(f'Public Key: {key}\n')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     Encrypter().main()

@@ -59,7 +59,11 @@ class Encrypter(object):
 
     def encrypt(self):  # 1
         questions = [
-            {'type': 'password', 'message': 'Enter the password to encrypt', 'name': 'password'}
+            {
+                'type': 'password',
+                'message': 'Enter the password to encrypt',
+                'name': 'password',
+            }
         ]
         crypto = CryptoUtility()
         if not crypto.import_public_key_from_file():
@@ -68,7 +72,7 @@ class Encrypter(object):
             answer = prompt(questions, style=custom_style_fancy)
             print('Encrypted password: (use incl. "crypt:")\n')
             cipher_text = crypto.encrypt_text(answer['password'])
-            print(f"{cipher_text}\n", style='bold blink #06c8ff')
+            print(f'{cipher_text}\n', style='bold blink #06c8ff')
 
     def configure_public_key(self):  # 3.2
         questions = [
@@ -138,5 +142,5 @@ class Encrypter(object):
             print(f'Public Key: {key}\n')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     Encrypter().main()

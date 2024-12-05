@@ -6,9 +6,9 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 4.0 (Python 3.9.0 on darwin)" name="Generator">
+<meta content="Robot Framework 7.1.1 (Python 3.12.1 on darwin)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
-<style media="all" type="text/css">
+<style media="all">
 :root {
     --background-color: white;
     --text-color: black;
@@ -20,18 +20,17 @@
     --less-important-text-color: gray;
     --link-color: #0000ee;
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #1c2227;
-        --text-color: #e2e1d7;
-        --border-color: #4e4e4e;
-        --light-background-color: #002b36;
-        --robot-highlight: yellow;
-        --highlighted-color: var(--background-color);
-        --highlighted-background-color: yellow;
-        --less-important-text-color: #5b6a6f;
-        --link-color: #52adff;
-    }
+[data-theme="dark"] {
+    --background-color: #1c2227;
+    --text-color: #e2e1d7;
+    --border-color: #4e4e4e;
+    --light-background-color: #002b36;
+    --robot-highlight: yellow;
+    --highlighted-color: var(--background-color);
+    --highlighted-background-color: yellow;
+    --less-important-text-color: #5b6a6f;
+    --link-color: #52adff;
+    color-scheme: dark;
 }
 body {
     background: var(--background-color);
@@ -235,8 +234,26 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     content: '·';
     padding-left: 0.5rem;
 }
+.enum-type-members, .dt-usages-list {
+    list-style: none;
+    padding-left: 1em;
+}
+.dt-usages-list > li {
+    margin-bottom: 0.2em;
+}
+.dt-usages a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: inline-block;
+    font-size: 0.9em;
+}
+.dt-usages a::first-letter {
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
 .arguments-list-container {
     overflow-y: auto;
+    margin-bottom: 1.33rem;
 }
 .arguments-list {
     display: -ms-inline-grid;
@@ -278,13 +295,18 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     display: flex;
     min-width: 150px;
 }
-.arguments-list .arg-type {
+.arguments-list .arg-type,
+.return-type .arg-type {
     margin-left: 2rem;
     -ms-grid-column: 3;
     grid-column: 3;
     background: var(--background-color);
     white-space: nowrap;
     -webkit-text-size-adjust: none;
+}
+.tags .kw-tags {
+    margin-left: 2rem;
+    display: flex;
 }
 .arguments-list .arg-kind {
   color: transparent;
@@ -349,7 +371,7 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
         display: block;
         position: fixed;
         height: 100vh;
-        width: 100vw;
+        width: 100%;
     }
     .keywords-overview {
         border: none;
@@ -357,6 +379,7 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     }
     .shortcuts {
         max-width: 100vw;
+        overscroll-behavior: none;
     }
 }
 .metadata {
@@ -466,9 +489,6 @@ h4 {
     display: flex;
     flex-direction: column;
 }
-.enum-type-members, .dt-usage-list {
-    list-style: none;
-}
 .data-type-container {
     border-top: 1px solid var(--border-color);
     padding: 0.5rem 1.0rem 0.5rem 1.0rem;
@@ -497,6 +517,7 @@ h4 {
 }
 .enum-type-members span,
 .args span,
+.return-type span,
 .args a
  {
     font-family: monospace;
@@ -504,22 +525,12 @@ h4 {
     padding: 0 0.1em;
     font-size: 1.1em;
 }
+.arg-type,
 span.type,
 a.type {
     font-size: 1em;
     background: none;
     padding: 0 0
-}
-.arg-type span.or::after {
-    content: ' or ';
-}
-span.or {
-    background: none;
-    font-size: 0.7em;
-    font-family: system-ui, -apple-system, sans-serif;
-}
-.arg-type span.or:nth-last-of-type(1) {
-    display: none;
 }
 .typed-dict-item .td-type::after {
     content: ',';
@@ -542,7 +553,7 @@ span.or {
     background: var(--highlighted-background-color);
     color: var(--highlighted-color);
 }
-.tags {
+.tags, .return-type {
     display: flex;
     align-items: baseline;
 }
@@ -571,8 +582,83 @@ span.or {
 .no-match .kw-name {
     color: var(--less-important-text-color);
 }
+.modal-icon {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    padding: 0;
+    border: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="100%" width="100%"><path stroke="black" fill="none" stroke-width="2px" stroke-linecap="round" d="M1 8 L1 1 L8 1 M16 1 L23 1 L23 8 M23 16 L23 23 L16 23 M8 23 L1 23 L1 16"></path><path fill="black" stroke="none" stroke-width="1px" transform="scale(1.3) translate(-3 -2.5)" d="M19 7.97zm-8 9.2-4-2.3v-4.63l4 2.33v4.6zm1-6.33L8.04 8.53 12 6.25l3.96 2.28L12 10.84zm5 4.03-4 2.3v-4.6l4-2.33v4.63z"></path></svg>');
+}
+@media (prefers-color-scheme: dark) {
+    .modal-icon {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="100%" width="100%"><path stroke="%23e2e1d7" fill="none" stroke-width="2px" stroke-linecap="round" d="M1 8 L1 1 L8 1 M16 1 L23 1 L23 8 M23 16 L23 23 L16 23 M8 23 L1 23 L1 16"></path><path fill="%23e2e1d7" stroke="none" stroke-width="1px" transform="scale(1.3) translate(-3 -2.5)" d="M19 7.97zm-8 9.2-4-2.3v-4.63l4 2.33v4.6zm1-6.33L8.04 8.53 12 6.25l3.96 2.28L12 10.84zm5 4.03-4 2.3v-4.6l4-2.33v4.63z"></path></svg>');
+    }
+}
+.modal-background, .modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+.modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+.modal {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 720px;
+    max-width: calc(100vw - 2rem);
+    margin: 0 auto;
+    height: calc(100vh - 6rem);
+    overflow: auto;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    z-index: 2;
+    transition-delay: 0.1s;
+}
+.modal-content {
+    margin-bottom: 3rem;
+}
+.modal > .modal-content > .data-type-container {
+    border-top: none;
+}
+.modal-close-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+.modal-close-button-container {
+    width: 720px;
+    max-width: calc(100vw - 2rem);
+    margin: 0 auto;
+    overflow: auto;
+}
+.modal-close-button {
+    margin: 0.5rem 0;
+    padding: 0.25rem 0.5rem;
+    border-radius:3px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+.modal-background.visible, .modal.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+#data-types-container {
+    display: none;
+}
 </style>
-<style media="all" type="text/css">
+<style media="all">
 /* Pygments 'default' style sheet. Generated with Pygments 2.1.3 using:
     pygmentize -S default -f html -a .code > src/robot/htmldata/libdoc/pygments.css
     and added for dark mode
@@ -729,7 +815,7 @@ span.or {
     .code .il { color: #2aa198 } /* Literal.Number.Integer.Long */
 }
 </style>
-<style media="print" type="text/css">
+<style media="print">
 body {
     margin: 0;
     padding: 0;
@@ -742,7 +828,7 @@ a {
     display: none;
 }
 </style>
-<style media="all" type="text/css">
+<style media="all">
 #javascript-disabled {
     width: 600px;
     margin: 100px auto 0 auto;
@@ -765,7 +851,7 @@ a {
     font-style: italic;
 }
 </style>
-<style media="all" type="text/css">
+<style media="all">
 #introduction-container > h2,
 .doc > h1,
 .doc > h2,
@@ -842,7 +928,8 @@ storage = function () {
     var prefix = 'robot-framework-';
     var storage;
     function init(user) {
-        prefix += user + '-';
+        if (user)
+            prefix += user + '-';
         storage = getStorage();
     }
     function getStorage() {
@@ -856,16 +943,19 @@ storage = function () {
             return {};
         }
     }
-    function get(name, defaultValue) {
-        var value = storage[prefix + name];
+    function get(key, defaultValue) {
+        var value = storage[fullKey(key)];
         if (typeof value === 'undefined')
             return defaultValue;
         return value;
     }
-    function set(name, value) {
-        storage[prefix + name] = value;
+    function set(key, value) {
+        storage[fullKey(key)] = value;
     }
-    return {init: init, get: get, set: set};
+    function fullKey(key) {
+        return prefix + key;
+    }
+    return {init: init, get: get, set: set, fullKey: fullKey};
 }();
 </script>
 <script type="text/javascript">
@@ -1101,7 +1191,7 @@ window.util = function () {
 jQuery.extend({highlight:function(e,t,n,r){if(e.nodeType===3){var i=e.data.match(t);if(i){var s=document.createElement(n||"span");s.className=r||"highlight";var o=e.splitText(i.index);o.splitText(i[0].length);var u=o.cloneNode(true);s.appendChild(u);o.parentNode.replaceChild(s,o);return 1}}else if(e.nodeType===1&&e.childNodes&&!/(script|style)/i.test(e.tagName)&&!(e.tagName===n.toUpperCase()&&e.className===r)){for(var a=0;a<e.childNodes.length;a++){a+=jQuery.highlight(e.childNodes[a],t,n,r)}}return 0}});jQuery.fn.unhighlight=function(e){var t={className:"highlight",element:"span"};jQuery.extend(t,e);return this.find(t.element+"."+t.className).each(function(){var e=this.parentNode;e.replaceChild(this.firstChild,this);e.normalize()}).end()};jQuery.fn.highlight=function(e,t){var n={className:"highlight",element:"span",caseSensitive:false,wordsOnly:false};jQuery.extend(n,t);if(e.constructor===String){e=[e]}e=jQuery.grep(e,function(e,t){return e!=""});e=jQuery.map(e,function(e,t){return e.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,"\\$&")});if(e.length==0){return this}var r=n.caseSensitive?"":"i";var i="("+e.join("|")+")";if(n.wordsOnly){i="\\b"+i+"\\b"}var s=new RegExp(i,r);return this.each(function(){jQuery.highlight(this,s,n.element,n.className)})}
 </script>
 <script type="text/javascript">
-libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotframework-crypto\">\n<h1 class=\"title\">robotframework-crypto</h1>\n<p>CryptoLibrary is a library for secure password handling.\n<a class=\"reference external\" href=\"https://github.com/Snooz82/robotframework-crypto\">project page</a></p>\n<p>For more information about Robot Framework, see <a class=\"reference external\" href=\"http://robotframework.org\">http://robotframework.org</a>.</p>\n<p><a class=\"reference external\" href=\"https://snooz82.github.io/robotframework-crypto/CryptoLibrary.html\">Keyword Documentation</a></p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"installation\">\n<h1>Installation</h1>\n<p>If you already have Python &gt;= 3.6 with pip installed, you can simply\nrun:</p>\n<p><tt class=\"docutils literal\">pip install <span class=\"pre\">--upgrade</span> <span class=\"pre\">robotframework-crypto</span></tt></p>\n<p>or if you have Python 2 and 3 installed in parallel you may use</p>\n<p><tt class=\"docutils literal\">pip3 install <span class=\"pre\">--upgrade</span> <span class=\"pre\">robotframework-crypto</span></tt></p>\n<p>If you have Python 2 ... i am very sorry! Please update!</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"how-it-works\">\n<h1>How it works</h1>\n<p>CryptoLibrary uses asymmetric crypto with elliptic curve cryptography to store confidential data securely.</p>\n<p>With the command <tt class=\"docutils literal\">CryptoLibrary</tt> in console/terminal you can generate a key pair\n(private and public key) for your test env.\nYou will get the public key after generating.</p>\n<p>This public key can now be used to encrypt every data you do not want to be public.\nPasswords, personal data, etc.</p>\n<p>You can use the command<span class=\"name\">`CryptoClient</span>` on you computer where you want to encrypt data.</p>\n<p>Encrypted Data will look like this:</p>\n<p><tt class=\"docutils literal\">crypt:tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5</tt></p>\n<p>This encrypted data can now be decrypted with CryptoLibrary within Robot Framework.</p>\n<p>CryptoLibrary need the private_key_store.json for this.\nThis is what is generated as key pair.\nPrivate key can be imported in test env with <tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt> .</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"suppressing-encrypted-text-from-logs\">\n<h2 id=\"Suppressing encrypted Text from Logs\">Suppressing encrypted Text from Logs</h2>\n<p>All Data that is decrypted by CryptoLibrary is replaced in the log by <tt class=\"docutils literal\">***</tt>\nThis works always and can not be disabled.\nNo need to use special keywords for this.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"usage-in-test\">\n<h2 id=\"Usage in Test\">Usage in Test</h2>\n<pre class=\"code robotframework literal-block\">\n<span class=\"gh\">*** Settings ***</span><span class=\"p\">\n</span><span class=\"kn\">Resource</span><span class=\"p\">    </span><span class=\"nn\">imports.resource</span><span class=\"p\">\n</span><span class=\"kn\">Library</span><span class=\"p\">     </span><span class=\"nn\">CryptoLibrary</span><span class=\"p\">    %{</span><span class=\"nv\">private_key_password</span><span class=\"p\">}    </span><span class=\"s\">variable_decryption=False</span><span class=\"p\">\n</span><span class=\"c\">#private key which should be secret, should also be protected by a password\n</span><span class=\"p\">\n</span><span class=\"gh\">*** Variables ***</span><span class=\"p\">\n${</span><span class=\"nv\">secret</span><span class=\"p\">}=     </span><span class=\"s\">KILL ALL HUMANS!!!</span><span class=\"p\">\n${</span><span class=\"nv\">enc_user</span><span class=\"p\">}=   </span><span class=\"s\">crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=</span><span class=\"p\">\n${</span><span class=\"nv\">enc_pwd</span><span class=\"p\">}=    </span><span class=\"s\">crypt:TVpamLXCtrzRsl8UAgD0YuoY+lSJNV73+bTYhOP51zM1GQihgyCvSZ2CoGoKsUHLFjokyJLHxFzPEB4=</span><span class=\"p\">\n\n</span><span class=\"gh\">*** Test Cases ***</span><span class=\"p\">\n</span><span class=\"gu\">Valid Login</span><span class=\"p\">\n    </span><span class=\"nf\">Open Browser</span><span class=\"p\">    ${</span><span class=\"nv\">BASE-URL</span><span class=\"p\">}\n    </span><span class=\"nf\">Suppress Logging</span><span class=\"p\">                                  </span><span class=\"c\">#disable Robot Framework logging\n</span><span class=\"p\">    ${</span><span class=\"nv\">var</span><span class=\"p\">}=    </span><span class=\"nf\">set Variable</span><span class=\"p\">   ${</span><span class=\"nv\">secret</span><span class=\"p\">}\n    </span><span class=\"nf\">Log</span><span class=\"p\">    ${</span><span class=\"nv\">var</span><span class=\"p\">}\n    </span><span class=\"nf\">Unsuppress Logging</span><span class=\"p\">                                </span><span class=\"c\">#enable Robot Framework logging\n</span><span class=\"p\">    ${</span><span class=\"nv\">user</span><span class=\"p\">}=    </span><span class=\"nf\">Get Decrypted Text</span><span class=\"p\">    ${</span><span class=\"nv\">enc_user</span><span class=\"p\">}     </span><span class=\"c\">#decrypts cipher text and returns plain text\n</span><span class=\"p\">    </span><span class=\"nf\">Input Text</span><span class=\"p\">      </span><span class=\"s\">id:input_username</span><span class=\"p\">    ${</span><span class=\"nv\">user</span><span class=\"p\">}\n    ${</span><span class=\"nv\">password</span><span class=\"p\">}=    </span><span class=\"nf\">Get Decrypted Text</span><span class=\"p\">    ${</span><span class=\"nv\">enc_pwd</span><span class=\"p\">}  </span><span class=\"c\">#decrypts cipher text and returns plain text\n</span><span class=\"p\">    </span><span class=\"nf\">Input Password</span><span class=\"p\">    </span><span class=\"s\">id:input_password</span><span class=\"p\">    ${</span><span class=\"nv\">password</span><span class=\"p\">}\n    </span><span class=\"nf\">Click Button</span><span class=\"p\">    </span><span class=\"s\">id:button_login</span><span class=\"p\">\n    </span><span class=\"nf\">Page Should Contain Element</span><span class=\"p\">    </span><span class=\"s\">//a[text()='Logout']</span><span class=\"p\">\n    [</span><span class=\"kn\">Teardown</span><span class=\"p\">]   </span><span class=\"nf\">Close Browser</span>\n</pre>\n<p>in this case the decryption password for the private key.\nIt can also be saved on test env persistently as a hash.</p>\n<p>The parameter <strong>variable_decryption</strong> in the Library call, if set to true it will automatically decode ALL passwords defined in the variables section\nand then <tt class=\"docutils literal\">&quot;Get Decrypted Text&quot;</tt> isn't needed.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"importing-of-cryptolibrary\">\n<h2 id=\"Importing of CryptoLibrary\">Importing of CryptoLibrary</h2>\n<table border=\"1\" class=\"docutils\">\n<colgroup>\n<col width=\"14%\" />\n<col width=\"86%\" />\n</colgroup>\n<tbody valign=\"top\">\n<tr><td><strong>password:</strong></td>\n<td>Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.</td>\n</tr>\n<tr><td><strong>variable_decryption:</strong></td>\n<td>If set to <tt class=\"docutils literal\">True</tt> all variables that are available on Test Suite or on Test Case start,\nthat contain a encrypted text, will be decrypted automatically.</td>\n</tr>\n<tr><td><strong>key_path:</strong></td>\n<td>A path that defines where the key pair is stored physically.\nPath needs to be an absolute path or relative to <tt class=\"docutils literal\">cryptoutility.py</tt>.</td>\n</tr>\n</tbody>\n</table>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n</div>\n<div class=\"section\" id=\"menu-walkthrough\">\n<h1>Menu walkthrough</h1>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"cryptolibrary-command-line-tool\">\n<h2 id=\"CryptoLibrary Command Line Tool\">CryptoLibrary Command Line Tool</h2>\n<p>This Command Line tool has to be used to create a key pair.\nIt can also show the public key and encrypt or decrypt data.</p>\n<p><tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt>:</p>\n<pre class=\"literal-block\">\n? What do you want to do?  (Use arrow keys)\n  Encrypt\n  Decrypt\n  Open config ---&gt;  ? What do you want to do?  (Use arrow keys)\n  Quit                 Configure key pair    -----------------------------------------------------------------------------------------&gt;  ? What do you want to do?  (Use arrow keys)\n                       Configure public key  ---&gt;  ? What do you want to do?  (Use arrow keys)                                             Generate key pair\n                       Back                          Set public key from string  ---&gt;   ? Input public_key as Base64:  ThePublicKey        Set key path\n                                                     Get public key from string  ---&gt;   Public Key: ThePublicKey                           Set key pair from string\n                                                     Delete public key           ---&gt;   ? Do you really want to delete public key?         Delete key pair\n                                                     Back                                                                                  Save private key password\n                                                                                                                                           Delete saved password\n                                                                                                                                           Back\n? What do you want to do?  (Use arrow keys)\n  Encrypt     -------------------------------------------------------------------&gt;   ? Enter the password to encrypt  YourPassword\n  Decrypt     -----&gt; ? Input encrypted cipher text:  crypt:TheEncryptedPassword      Encrypted password: (use inlc. &quot;crypt:&quot;)\n  Open config        ? Enter the password to decrypt  **********\n  Quit               Your password is: YourPassword                                  crypt:TheEncryptedPassword=\n</pre>\n<p>To start using the CryptoLibrary, start <tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt> and choose <tt class=\"docutils literal\">Open config</tt> -&gt; <tt class=\"docutils literal\">Configure key pair</tt>-&gt; <tt class=\"docutils literal\">Generate key pair</tt>.</p>\n<p>This generates the private and public keys in the <tt class=\"docutils literal\">private_key.json</tt> and <tt class=\"docutils literal\">public_key.key</tt> files.\nThe <tt class=\"docutils literal\">private_key.json</tt> is needed to decrypt the values on your test server and has to be copied manually or added through the CLI interface.\nSee <tt class=\"docutils literal\">Set key pair <span class=\"pre\">from...</span></tt> above.</p>\n<p>Next you can encrypt the values needed on your test server, looking something like <tt class=\"docutils literal\">crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=</tt></p>\n<p>There are two options to decrypt your values in the robot file. When CryptoLibrary is loaded with <tt class=\"docutils literal\">variable_decryption=True</tt>,\nALL variables defined in that section, will automatically get decrypted.\nWhen the option is turned off (the default) the keyword <tt class=\"docutils literal\">Get Decrypted Text</tt> explicitly decrypts specific values.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"cryptoclient-command-line-tool\">\n<h2 id=\"CryptoClient Command Line Tool\">CryptoClient Command Line Tool</h2>\n<p>This CryptoClient command line tool is the tool for all test designers that want to encrypt data.\nI can only import and show the public key and encrypt data.</p>\n<p><tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoClient</tt>:</p>\n<pre class=\"literal-block\">\n? What do you want to do?  (Use arrow keys)\n  Encrypt     ---------------------------------------------------------------------------------------&gt;   ? Enter the password to encrypt  YourPassword\n  Open config -----&gt; ? What do you want to do?  (Use arrow keys)                                           Encrypted password: (use inlc. &quot;crypt:&quot;)\n  Quit                 Set public key from string  ---&gt;   ? Input public_key as Base64:  ThePublicKey\n                       Get public key from string  ---&gt;   Public Key: ThePublicKey                         crypt:TheEncryptedPassword\n                       Delete public key           ---&gt;   ? Do you really want to delete public key?\n                       Back\n</pre>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n</div>\n<div class=\"section\" id=\"seleniumlibrary-plugin\">\n<h1>SeleniumLibrary Plugin</h1>\n<p>CryptoLibrary.Plugin is a SeleniumLibrary Plugin.\nWhen taken into usage, the <tt class=\"docutils literal\">Input Password</tt> Keyword can now handle decrypted cipher texts as well.</p>\n<p>Example:</p>\n<pre class=\"code robotframework literal-block\">\n<span class=\"gh\">*** Settings ***</span><span class=\"p\">\n</span><span class=\"kn\">Library</span><span class=\"p\">    </span><span class=\"nn\">SeleniumLibrary</span><span class=\"p\">    </span><span class=\"s\">plugins=CryptoLibrary.Plugin</span><span class=\"p\">\n\n\n</span><span class=\"gh\">*** Variables ***</span><span class=\"p\">\n${</span><span class=\"nv\">Admins-Password</span><span class=\"p\">}=    </span><span class=\"s\">crypt:fQ5Iqn/j2lN8rXwimyz0JXlYzD0gTsPRwb0YJ3YSvDchkvDpfwYDmhHxsZ2i7bIQDlsWKJVhBb+Dz4w=</span><span class=\"p\">\n\n\n</span><span class=\"gh\">*** Test Cases ***</span><span class=\"p\">\n</span><span class=\"gu\">Decrypt as Plugin</span><span class=\"p\">\n    </span><span class=\"nf\">Open Browser</span><span class=\"p\">      </span><span class=\"s\">http://www.keyword-driven.de</span><span class=\"p\">\n    </span><span class=\"nf\">Input Text</span><span class=\"p\">        </span><span class=\"s\">input_username</span><span class=\"p\">    </span><span class=\"s\">admin</span><span class=\"p\">\n    </span><span class=\"nf\">Input Password</span><span class=\"p\">    </span><span class=\"s\">input_password</span><span class=\"p\">    ${</span><span class=\"nv\">Admins-Password</span><span class=\"p\">}</span>\n</pre>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<p>It may happen that keywords changes.\ni try not to do, but it can happen in major releases.\nFeel free to make a pull Request to improve docs or write some tests for it.</p>\n</div>\n</div>\n", "version": "0.3.0", "generated": "2021-04-01 00:44:27", "type": "LIBRARY", "scope": "GLOBAL", "docFormat": "HTML", "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 28, "tags": [], "inits": [{"name": "Init", "args": [{"name": "password", "types": [], "defaultValue": "None", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "password=None"}, {"name": "variable_decryption", "types": [], "defaultValue": "False", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "variable_decryption=False"}, {"name": "key_path", "types": [], "defaultValue": "None", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "key_path=None"}], "doc": "<div class=\"document\">\n<table border=\"1\" class=\"docutils\">\n<colgroup>\n<col width=\"14%\" />\n<col width=\"86%\" />\n</colgroup>\n<tbody valign=\"top\">\n<tr><td><strong>password:</strong></td>\n<td>Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.</td>\n</tr>\n<tr><td><strong>variable_decryption:</strong></td>\n<td>If set to <tt class=\"docutils literal\">True</tt> all variables that are available on Test Suite or on Test Case start,\nthat contain a encrypted text, will be decrypted automatically.</td>\n</tr>\n<tr><td><strong>key_path:</strong></td>\n<td>A path that defines where the key pair is stored physically.\nPath needs to be an absolute path or relative to <tt class=\"docutils literal\">cryptoutility.py</tt>.</td>\n</tr>\n</tbody>\n</table>\n</div>\n", "shortdoc": "+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **password:**            | Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.            | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start,                                                                 | |                          | that contain a encrypted text, will be decrypted automatically.                                                                                          | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **key_path:**            | A path that defines where the key pair is stored physically.                                                                                             | |                          | Path needs to be an absolute path or relative to ``cryptoutility.py``.                                                                                   | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+", "tags": [], "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 248}], "keywords": [{"name": "Conceal Text In Logs", "args": [{"name": "text", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "text"}], "doc": "<div class=\"document\">\n<p>This keyword conceals the password, passed as input, in the logs.\nOnly <tt class=\"docutils literal\">***</tt> will be shown in the logs.</p>\n<p>Because CrytoLibrary is a global Library, this text will be hidden from the point\nwhere it is concealed until robot execution ends.\nEarlier appearances will be visible in the logs!</p>\n</div>\n", "shortdoc": "This keyword conceals the password, passed as input, in the logs. Only ``***`` will be shown in the logs.", "tags": [], "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 270}, {"name": "Get Decrypted Text", "args": [{"name": "cipher_text", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "cipher_text"}], "doc": "<div class=\"document\">\n<p>Decrypts cipher text and returns the plain text.</p>\n<p>Example:</p>\n<pre class=\"code robotframework literal-block\">\n<span class=\"c\">${plain_text}=</span><span class=\"p\">    </span><span class=\"c\">Get Decrypted Text</span><span class=\"p\">    </span><span class=\"c\">crypt:sZ2i7bIQDlsWKJVhBb+Dz4w=</span>\n</pre>\n</div>\n", "shortdoc": "Decrypts cipher text and returns the plain text.", "tags": [], "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 280}, {"name": "Suppress Logging", "args": [{"name": "disable", "types": ["bool"], "defaultValue": "True", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "disable: bool = True"}], "doc": "<div class=\"document\">\n<p>Disables the logging of robot framework until <tt class=\"docutils literal\">Unsuppress Logging</tt> has been called.</p>\n</div>\n", "shortdoc": "Disables the logging of robot framework until ``Unsuppress Logging`` has been called.", "tags": [], "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 295}, {"name": "Unsuppress Logging", "args": [], "doc": "<div class=\"document\">\n<p>Enables the logging of robot framework and set it back to the original log level.</p>\n</div>\n", "shortdoc": "Enables the logging of robot framework and set it back to the original log level.", "tags": [], "source": "/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 305}], "dataTypes": {"enums": [], "typedDicts": []}}
+libdoc = {"specversion": 3, "name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotframework-crypto\">\n<h1 class=\"title\">robotframework-crypto</h1>\n<p>CryptoLibrary is a library for secure password handling.\n<a class=\"reference external\" href=\"https://github.com/Snooz82/robotframework-crypto\">project page</a></p>\n<p>For more information about Robot Framework, see <a class=\"reference external\" href=\"http://robotframework.org\">http://robotframework.org</a>.</p>\n<p><a class=\"reference external\" href=\"https://snooz82.github.io/robotframework-crypto/CryptoLibrary.html\">Keyword Documentation</a></p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"installation\">\n<h1>Installation</h1>\n<p>If you already have Python &gt;= 3.6 with pip installed, you can simply\nrun:</p>\n<p><tt class=\"docutils literal\">pip install <span class=\"pre\">--upgrade</span> <span class=\"pre\">robotframework-crypto</span></tt></p>\n<p>or if you have Python 2 and 3 installed in parallel you may use</p>\n<p><tt class=\"docutils literal\">pip3 install <span class=\"pre\">--upgrade</span> <span class=\"pre\">robotframework-crypto</span></tt></p>\n<p>If you have Python 2 ... i am very sorry! Please update!</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"how-it-works\">\n<h1>How it works</h1>\n<p>CryptoLibrary uses asymmetric crypto with elliptic curve cryptography to store confidential data securely.</p>\n<p>With the command <tt class=\"docutils literal\">CryptoLibrary</tt> in console/terminal you can generate a key pair\n(private and public key) for your test env.\nYou will get the public key after generating.</p>\n<p>This public key can now be used to encrypt every data you do not want to be public.\nPasswords, personal data, etc.</p>\n<p>You can use the command<span class=\"name\">`CryptoClient</span>` on you computer where you want to encrypt data.</p>\n<p>Encrypted Data will look like this:</p>\n<p><tt class=\"docutils literal\">crypt:tIdr5s65+ggfJZl46pJgljioCUePUdZLozgiwquznw+xSlmzT3dcvfrTL9wIdRwmNOJuONT7FBW5</tt></p>\n<p>This encrypted data can now be decrypted with CryptoLibrary within Robot Framework.</p>\n<p>CryptoLibrary need the private_key_store.json for this.\nThis is what is generated as key pair.\nPrivate key can be imported in test env with <tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt> .</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"suppressing-encrypted-text-from-logs\">\n<h2 id=\"Suppressing encrypted Text from Logs\">Suppressing encrypted Text from Logs</h2>\n<p>All Data that is decrypted by CryptoLibrary is replaced in the log by <tt class=\"docutils literal\">***</tt>\nThis works always and can not be disabled.\nNo need to use special keywords for this.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"usage-in-test\">\n<h2 id=\"Usage in Test\">Usage in Test</h2>\n<pre class=\"code robotframework literal-block\">\n<span class=\"gh\">*** Settings ***</span><span class=\"p\">\n</span><span class=\"kn\">Resource</span><span class=\"p\">    </span><span class=\"nn\">imports.resource</span><span class=\"p\">\n</span><span class=\"kn\">Library</span><span class=\"p\">     </span><span class=\"nn\">CryptoLibrary</span><span class=\"p\">    %{</span><span class=\"nv\">private_key_password</span><span class=\"p\">}    </span><span class=\"s\">variable_decryption=False</span><span class=\"p\">\n</span><span class=\"c\">#private key which should be secret, should also be protected by a password\n</span><span class=\"p\">\n</span><span class=\"gh\">*** Variables ***</span><span class=\"p\">\n${</span><span class=\"nv\">secret</span><span class=\"p\">}=     </span><span class=\"s\">KILL ALL HUMANS!!!</span><span class=\"p\">\n${</span><span class=\"nv\">enc_user</span><span class=\"p\">}=   </span><span class=\"s\">crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=</span><span class=\"p\">\n${</span><span class=\"nv\">enc_pwd</span><span class=\"p\">}=    </span><span class=\"s\">crypt:TVpamLXCtrzRsl8UAgD0YuoY+lSJNV73+bTYhOP51zM1GQihgyCvSZ2CoGoKsUHLFjokyJLHxFzPEB4=</span><span class=\"p\">\n\n</span><span class=\"gh\">*** Test Cases ***</span><span class=\"p\">\n</span><span class=\"gu\">Valid Login</span><span class=\"p\">\n    </span><span class=\"nf\">Open Browser</span><span class=\"p\">    ${</span><span class=\"nv\">BASE-URL</span><span class=\"p\">}\n    </span><span class=\"nf\">Suppress Logging</span><span class=\"p\">                                  </span><span class=\"c\">#disable Robot Framework logging\n</span><span class=\"p\">    ${</span><span class=\"nv\">var</span><span class=\"p\">}=    </span><span class=\"nf\">set Variable</span><span class=\"p\">   ${</span><span class=\"nv\">secret</span><span class=\"p\">}\n    </span><span class=\"nf\">Log</span><span class=\"p\">    ${</span><span class=\"nv\">var</span><span class=\"p\">}\n    </span><span class=\"nf\">Unsuppress Logging</span><span class=\"p\">                                </span><span class=\"c\">#enable Robot Framework logging\n</span><span class=\"p\">    ${</span><span class=\"nv\">user</span><span class=\"p\">}=    </span><span class=\"nf\">Get Decrypted Text</span><span class=\"p\">    ${</span><span class=\"nv\">enc_user</span><span class=\"p\">}     </span><span class=\"c\">#decrypts cipher text and returns plain text\n</span><span class=\"p\">    </span><span class=\"nf\">Input Text</span><span class=\"p\">      </span><span class=\"s\">id:input_username</span><span class=\"p\">    ${</span><span class=\"nv\">user</span><span class=\"p\">}\n    ${</span><span class=\"nv\">password</span><span class=\"p\">}=    </span><span class=\"nf\">Get Decrypted Text</span><span class=\"p\">    ${</span><span class=\"nv\">enc_pwd</span><span class=\"p\">}  </span><span class=\"c\">#decrypts cipher text and returns plain text\n</span><span class=\"p\">    </span><span class=\"nf\">Input Password</span><span class=\"p\">    </span><span class=\"s\">id:input_password</span><span class=\"p\">    ${</span><span class=\"nv\">password</span><span class=\"p\">}\n    </span><span class=\"nf\">Click Button</span><span class=\"p\">    </span><span class=\"s\">id:button_login</span><span class=\"p\">\n    </span><span class=\"nf\">Page Should Contain Element</span><span class=\"p\">    </span><span class=\"s\">//a[text()='Logout']</span><span class=\"p\">\n    [</span><span class=\"kn\">Teardown</span><span class=\"p\">]   </span><span class=\"nf\">Close Browser</span>\n</pre>\n<p>in this case the decryption password for the private key.\nIt can also be saved on test env persistently as a hash.</p>\n<p>The parameter <strong>variable_decryption</strong> in the Library call, if set to true it will automatically decode ALL passwords defined in the variables section\nand then <tt class=\"docutils literal\">&quot;Get Decrypted Text&quot;</tt> isn't needed.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"importing-of-cryptolibrary\">\n<h2 id=\"Importing of CryptoLibrary\">Importing of CryptoLibrary</h2>\n<table border=\"1\" class=\"docutils\">\n<colgroup>\n<col width=\"14%\" />\n<col width=\"86%\" />\n</colgroup>\n<tbody valign=\"top\">\n<tr><td><strong>password:</strong></td>\n<td>Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.</td>\n</tr>\n<tr><td><strong>variable_decryption:</strong></td>\n<td>If set to <tt class=\"docutils literal\">True</tt> all variables that are available on Test Suite or on Test Case start,\nthat contain a encrypted text, will be decrypted automatically.</td>\n</tr>\n<tr><td><strong>key_path:</strong></td>\n<td>A path that defines where the key pair is stored physically.\nPath needs to be an absolute path or relative to <tt class=\"docutils literal\">cryptoutility.py</tt>.</td>\n</tr>\n</tbody>\n</table>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n</div>\n<div class=\"section\" id=\"menu-walkthrough\">\n<h1>Menu walkthrough</h1>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<div class=\"section\" id=\"cryptolibrary-command-line-tool\">\n<h2 id=\"CryptoLibrary Command Line Tool\">CryptoLibrary Command Line Tool</h2>\n<p>This Command Line tool has to be used to create a key pair.\nIt can also show the public key and encrypt or decrypt data.</p>\n<p><tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt>:</p>\n<pre class=\"literal-block\">\n? What do you want to do?  (Use arrow keys)\n  Encrypt\n  Decrypt\n  Open config ---&gt;  ? What do you want to do?  (Use arrow keys)\n  Quit                 Configure key pair    -----------------------------------------------------------------------------------------&gt;  ? What do you want to do?  (Use arrow keys)\n                       Configure public key  ---&gt;  ? What do you want to do?  (Use arrow keys)                                             Generate key pair\n                       Back                          Set public key from string  ---&gt;   ? Input public_key as Base64:  ThePublicKey        Set key path\n                                                     Get public key from string  ---&gt;   Public Key: ThePublicKey                           Set key pair from string\n                                                     Delete public key           ---&gt;   ? Do you really want to delete public key?         Delete key pair\n                                                     Back                                                                                  Save private key password\n                                                                                                                                           Delete saved password\n                                                                                                                                           Back\n? What do you want to do?  (Use arrow keys)\n  Encrypt     -------------------------------------------------------------------&gt;   ? Enter the password to encrypt  YourPassword\n  Decrypt     -----&gt; ? Input encrypted cipher text:  crypt:TheEncryptedPassword      Encrypted password: (use inlc. &quot;crypt:&quot;)\n  Open config        ? Enter the password to decrypt  **********\n  Quit               Your password is: YourPassword                                  crypt:TheEncryptedPassword=\n</pre>\n<p>To start using the CryptoLibrary, start <tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoLibrary</tt> and choose <tt class=\"docutils literal\">Open config</tt> -&gt; <tt class=\"docutils literal\">Configure key pair</tt>-&gt; <tt class=\"docutils literal\">Generate key pair</tt>.</p>\n<p>This generates the private and public keys in the <tt class=\"docutils literal\">private_key.json</tt> and <tt class=\"docutils literal\">public_key.key</tt> files.\nThe <tt class=\"docutils literal\">private_key.json</tt> is needed to decrypt the values on your test server and has to be copied manually or added through the CLI interface.\nSee <tt class=\"docutils literal\">Set key pair <span class=\"pre\">from...</span></tt> above.</p>\n<p>Next you can encrypt the values needed on your test server, looking something like <tt class=\"docutils literal\">crypt:nkpEPOVKfOko3t04XxOupA+F/ANTEuR9aQuPaPeMBGBQenwYf6UNESEl9MWRKGuj60ZWd10=</tt></p>\n<p>There are two options to decrypt your values in the robot file. When CryptoLibrary is loaded with <tt class=\"docutils literal\">variable_decryption=True</tt>,\nALL variables defined in that section, will automatically get decrypted.\nWhen the option is turned off (the default) the keyword <tt class=\"docutils literal\">Get Decrypted Text</tt> explicitly decrypts specific values.</p>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n<div class=\"section\" id=\"cryptoclient-command-line-tool\">\n<h2 id=\"CryptoClient Command Line Tool\">CryptoClient Command Line Tool</h2>\n<p>This CryptoClient command line tool is the tool for all test designers that want to encrypt data.\nI can only import and show the public key and encrypt data.</p>\n<p><tt class=\"docutils literal\">python <span class=\"pre\">-m</span> CryptoClient</tt>:</p>\n<pre class=\"literal-block\">\n? What do you want to do?  (Use arrow keys)\n  Encrypt     ---------------------------------------------------------------------------------------&gt;   ? Enter the password to encrypt  YourPassword\n  Open config -----&gt; ? What do you want to do?  (Use arrow keys)                                           Encrypted password: (use inlc. &quot;crypt:&quot;)\n  Quit                 Set public key from string  ---&gt;   ? Input public_key as Base64:  ThePublicKey\n                       Get public key from string  ---&gt;   Public Key: ThePublicKey                         crypt:TheEncryptedPassword\n                       Delete public key           ---&gt;   ? Do you really want to delete public key?\n                       Back\n</pre>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n</div>\n</div>\n<div class=\"section\" id=\"seleniumlibrary-plugin\">\n<h1>SeleniumLibrary Plugin</h1>\n<p>CryptoLibrary.Plugin is a SeleniumLibrary Plugin.\nWhen taken into usage, the <tt class=\"docutils literal\">Input Password</tt> Keyword can now handle decrypted cipher texts as well.</p>\n<p>Example:</p>\n<pre class=\"code robotframework literal-block\">\n<span class=\"gh\">*** Settings ***</span><span class=\"p\">\n</span><span class=\"kn\">Library</span><span class=\"p\">    </span><span class=\"nn\">SeleniumLibrary</span><span class=\"p\">    </span><span class=\"s\">plugins=CryptoLibrary.Plugin</span><span class=\"p\">\n\n\n</span><span class=\"gh\">*** Variables ***</span><span class=\"p\">\n${</span><span class=\"nv\">Admins-Password</span><span class=\"p\">}=    </span><span class=\"s\">crypt:fQ5Iqn/j2lN8rXwimyz0JXlYzD0gTsPRwb0YJ3YSvDchkvDpfwYDmhHxsZ2i7bIQDlsWKJVhBb+Dz4w=</span><span class=\"p\">\n\n\n</span><span class=\"gh\">*** Test Cases ***</span><span class=\"p\">\n</span><span class=\"gu\">Decrypt as Plugin</span><span class=\"p\">\n    </span><span class=\"nf\">Open Browser</span><span class=\"p\">      </span><span class=\"s\">http://www.keyword-driven.de</span><span class=\"p\">\n    </span><span class=\"nf\">Input Text</span><span class=\"p\">        </span><span class=\"s\">input_username</span><span class=\"p\">    </span><span class=\"s\">admin</span><span class=\"p\">\n    </span><span class=\"nf\">Input Password</span><span class=\"p\">    </span><span class=\"s\">input_password</span><span class=\"p\">    ${</span><span class=\"nv\">Admins-Password</span><span class=\"p\">}</span>\n</pre>\n<div class=\"line-block\">\n<div class=\"line\"><br /></div>\n</div>\n<p>It may happen that keywords changes.\ni try not to do, but it can happen in major releases.\nFeel free to make a pull Request to improve docs or write some tests for it.</p>\n</div>\n</div>\n", "version": "0.4.0", "generated": "2024-12-05T23:18:50+00:00", "type": "LIBRARY", "scope": "GLOBAL", "docFormat": "HTML", "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 28, "tags": [], "inits": [{"name": "__init__", "args": [{"name": "password", "type": null, "defaultValue": "None", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "password=None"}, {"name": "variable_decryption", "type": null, "defaultValue": "False", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "variable_decryption=False"}, {"name": "key_path", "type": null, "defaultValue": "None", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "key_path=None"}], "returnType": null, "doc": "<div class=\"document\">\n<table border=\"1\" class=\"docutils\">\n<colgroup>\n<col width=\"14%\" />\n<col width=\"86%\" />\n</colgroup>\n<tbody valign=\"top\">\n<tr><td><strong>password:</strong></td>\n<td>Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.</td>\n</tr>\n<tr><td><strong>variable_decryption:</strong></td>\n<td>If set to <tt class=\"docutils literal\">True</tt> all variables that are available on Test Suite or on Test Case start,\nthat contain a encrypted text, will be decrypted automatically.</td>\n</tr>\n<tr><td><strong>key_path:</strong></td>\n<td>A path that defines where the key pair is stored physically.\nPath needs to be an absolute path or relative to <tt class=\"docutils literal\">cryptoutility.py</tt>.</td>\n</tr>\n</tbody>\n</table>\n</div>\n", "shortdoc": "+--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **password:**            | Password for private key can be given as argument. This should be stored as secret! Use environment variables instead of hard coding it here.            | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **variable_decryption:** | If set to ``True`` all variables that are available on Test Suite or on Test Case start,                                                                 | |                          | that contain a encrypted text, will be decrypted automatically.                                                                                          | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+ | **key_path:**            | A path that defines where the key pair is stored physically.                                                                                             | |                          | Path needs to be an absolute path or relative to ``cryptoutility.py``.                                                                                   | +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+", "tags": [], "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 248}], "keywords": [{"name": "Conceal Text In Logs", "args": [{"name": "text", "type": null, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "text"}], "returnType": null, "doc": "<div class=\"document\">\n<p>This keyword conceals the password, passed as input, in the logs.\nOnly <tt class=\"docutils literal\">***</tt> will be shown in the logs.</p>\n<p>Because CrytoLibrary is a global Library, this text will be hidden from the point\nwhere it is concealed until robot execution ends.\nEarlier appearances will be visible in the logs!</p>\n</div>\n", "shortdoc": "This keyword conceals the password, passed as input, in the logs. Only ``***`` will be shown in the logs.", "tags": [], "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 270}, {"name": "Get Decrypted Text", "args": [{"name": "cipher_text", "type": null, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "cipher_text"}], "returnType": null, "doc": "<div class=\"document\">\n<p>Decrypts cipher text and returns the plain text.</p>\n<p>Example:</p>\n<pre class=\"code robotframework literal-block\">\n<span class=\"c\">${plain_text}=</span><span class=\"p\">    </span><span class=\"c\">Get Decrypted Text</span><span class=\"p\">    </span><span class=\"c\">crypt:sZ2i7bIQDlsWKJVhBb+Dz4w=</span>\n</pre>\n</div>\n", "shortdoc": "Decrypts cipher text and returns the plain text.", "tags": [], "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 280}, {"name": "Suppress Logging", "args": [{"name": "disable", "type": {"name": "bool", "typedoc": "boolean", "nested": [], "union": false}, "defaultValue": "True", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "disable: bool = True"}], "returnType": null, "doc": "<div class=\"document\">\n<p>Disables the logging of robot framework until <tt class=\"docutils literal\">Unsuppress Logging</tt> has been called.</p>\n</div>\n", "shortdoc": "Disables the logging of robot framework until ``Unsuppress Logging`` has been called.", "tags": [], "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 295}, {"name": "Unsuppress Logging", "args": [], "returnType": null, "doc": "<div class=\"document\">\n<p>Enables the logging of robot framework and set it back to the original log level.</p>\n</div>\n", "shortdoc": "Enables the logging of robot framework and set it back to the original log level.", "tags": [], "source": "/Users/rener/Source/Snooz82/robotframework-crypto/src/CryptoLibrary/__init__.py", "lineno": 305}], "typedocs": [{"type": "Standard", "name": "boolean", "doc": "<p>Strings <code>TRUE</code>, <code>YES</code>, <code>ON</code> and <code>1</code> are converted to Boolean <code>True</code>, the empty string as well as strings <code>FALSE</code>, <code>NO</code>, <code>OFF</code> and <code>0</code> are converted to Boolean <code>False</code>, and the string <code>NONE</code> is converted to the Python <code>None</code> object. Other strings and other accepted values are passed as-is, allowing keywords to handle them specially if needed. All string comparisons are case-insensitive.</p>\n<p>Examples: <code>TRUE</code> (converted to <code>True</code>), <code>off</code> (converted to <code>False</code>), <code>example</code> (used as-is)</p>", "usages": ["Suppress Logging"], "accepts": ["string", "integer", "float", "None"]}]}
 </script>
 <title></title>
 </head>
@@ -1122,44 +1212,30 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
     window.addEventListener("hashchange", function() {
       document.getElementsByClassName("hamburger-menu")[0].checked = false;
     }, false);
+    window.addEventListener("hashchange", function() {
+        if (window.location.hash.indexOf('#type-') == 0) {
+            const hash = '#type-modal-' + decodeURI(window.location.hash.slice(6));
+            const typeDoc = document.querySelector(".data-types").querySelector(hash);
+            if (typeDoc) {
+              showModal(typeDoc);
+            }
+        }
+    }, false);
 </script>
 
 <script type="text/javascript">
-
-    function linkArgs(container, dataTypes, usageName) {
-      container.forEach(function(keyword) {
-        let user = usageName || keyword.name
-          keyword.args.forEach(function (arg) {
-            arg.linked = arg.types.filter(function(value) {
-              return dataTypes.filter(function (dataType) {
-                 if (dataType.name === value) {
-                   if (dataType.usage.indexOf(user) === -1) {
-                    dataType.usage.push(user);
-                   }
-                   return true;
-                 }
-                 return false;
-              })[0];
-            });
-          })
-        }
-      );
-    }
 
     $(document).ready(function() {
         parseTemplates();
         document.title = libdoc.name;
         storage.init('libdoc');
-        libdoc.dataTypes = libdoc.dataTypes.enums.concat(libdoc.dataTypes.typedDicts);
-        libdoc.dataTypes = libdoc.dataTypes.map(function(dt) {
-          dt.usage = [];
-          return dt;
-        })
-        libdoc.dataTypes.sort(compare)
-        linkArgs(libdoc.inits, libdoc.dataTypes, "Importing");
-        linkArgs(libdoc.keywords, libdoc.dataTypes);
+        setTheme();
         renderTemplate('base', libdoc, $('body'));
         if (libdoc.inits.length) {
+            libdoc.typedocs.map(function(type) {
+                var index = type.usages.indexOf('__init__');
+                if (index != -1) type.usages[index] = 'Importing';
+            });
             renderTemplate('importing', libdoc);
         }
         renderTemplate('shortcuts', libdoc);
@@ -1184,16 +1260,21 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
             openKeywordWall();
           }
       }, 0);
+        createModal();
     });
 
-     function compare( a, b ) {
-      if ( a.name < b.name ){
-        return -1;
-      }
-      if ( a.name > b.name ){
-        return 1;
-      }
-      return 0;
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme || getTheme());
+    }
+
+    function getTheme() {
+        if (libdoc['theme']) {
+            return libdoc['theme'];
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        } else {
+            return 'light;'
+        }
     }
 
     function parseTemplates() {
@@ -1215,9 +1296,9 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
 
     function scrollToHash() {
         if (window.location.hash) {
-            var hash = window.location.hash.substring(1).replace('+', ' ');
-            window.location.hash = '';
-            window.location.hash = hash;
+            var hash = window.location.hash.substring(1);
+            var id = decodeURIComponent(hash);
+            document.getElementById(id).scrollIntoView();
         }
     }
 
@@ -1370,10 +1451,79 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
             renderTemplate('tags', libdoc);
         }
         document.getElementById("keyword-statistics-header").innerText = ''+libdoc.keywords.length;
-        if (libdoc.dataTypes.length) {
-          document.getElementById("type-statistics-header").innerText = '' + libdoc.dataTypes.length;
+        if (libdoc.typedocs.length) {
+            document.getElementById("type-statistics-header").innerText = '' + libdoc.typedocs.length;
         }
         history.replaceState && history.replaceState(null, '', location.pathname);
+    }
+
+    function createModal() {
+        const modalBackground = document.createElement('div');
+        modalBackground.id = 'modal-background';
+        modalBackground.classList.add('modal-background');
+        modalBackground.addEventListener('click', ({ target }) => {
+            if (target.id === 'modal-background') hideModal()
+        })
+
+        const modalCloseButton = document.createElement('button');
+        modalCloseButton.innerHTML = `<svg xmlns="
+      http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="2em" height="2em" className="block" data-v-2754030d="" data-v-512b0344="">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                    data-v-2754030d="" fill="var(--text-color)"></path></svg>`;
+        modalCloseButton.classList.add('modal-close-button');
+        const modalCloseButtonContainer = document.createElement('div');
+        modalCloseButtonContainer.classList.add('modal-close-button-container');
+        modalCloseButtonContainer.appendChild(modalCloseButton);
+        modalCloseButton.addEventListener('click', () => {
+            hideModal()
+        })
+        modalBackground.appendChild(modalCloseButtonContainer);
+        modalCloseButtonContainer.addEventListener('click', () => {
+            hideModal()
+        })
+
+        const modal = document.createElement('div');
+        modal.id = 'modal';
+        modal.classList.add('modal');
+        modal.addEventListener('click', ({ target }) => {
+            if (target.tagName.toUpperCase() === 'A') hideModal()
+        })
+
+
+        const modalContent = document.createElement('div');
+        modalContent.id = 'modal-content';
+        modalContent.classList.add('modal-content');
+        modal.appendChild(modalContent);
+
+        modalBackground.appendChild(modal);
+        document.body.appendChild(modalBackground);
+        document.addEventListener('keydown', ({ key }) => {
+            if (key === 'Escape') hideModal()
+        })
+    }
+    function showModal(content) {
+        const modalBackground = document.getElementById('modal-background');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+        modalBackground.classList.add('visible');
+        modal.classList.add('visible');
+        modalContent.appendChild(content.cloneNode(true));
+        document.body.style.overflow = 'hidden';
+    }
+    function hideModal() {
+        const modalBackground = document.getElementById('modal-background');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+
+        modalBackground.classList.remove('visible');
+        modal.classList.remove('visible');
+        document.body.style.overflow = 'auto';
+        if (window.location.hash.indexOf('#type-') == 0)
+            history.pushState("", document.title, window.location.pathname);
+        // modal is hidden with a fading transition, timeout prevents premature emptying of modal
+        setTimeout(() => {
+            modalContent.innerHTML = '';
+        }, 200);
     }
 
     // http://stackoverflow.com/a/18484799
@@ -1384,7 +1534,6 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
             timer = setTimeout(callback, ms);
         };
     })();
-
 </script>
 
 <script type="text/x-jquery-tmpl" id="base-template">
@@ -1561,13 +1710,23 @@ libdoc = {"name": "CryptoLibrary", "doc": "<div class=\"document\" id=\"robotfra
                 </div>
               </div>
             {{/if}}
+            {{if returnType}}
+            <div class="return-type">
+              <h4>Return Type</h4>
+              <span class="arg-type">
+              {{tmpl(returnType) 'type-info-template'}}
+              </span>
+            </div>
+            {{/if}}
             {{if libdoc.tags.length && tags.length}}
               <div class="tags">
                 <h4>Tags</h4>
+                <span class="kw-tags">
                 {{each tags}}
                   <a href="javascript:tagSearch('${$value}')"
                     title="Show keywords with this tag">${$value}</a>{{if $index < tags.length-1}},<br>{{/if}}
                 {{/each}}
+                </span>
               </div>
             {{/if}}
           </div>
@@ -1597,35 +1756,61 @@ ${name}
   </div>
 {{/if}}
 
-{{if types.length}}
-  <span class="arg-type" title="Argument '${name}' will be converter to type ${types}">
-    ${( $data.linked = linked ),''}
-    {{each types}}&lt;{{if $data.linked.indexOf($value) > -1}}<a class="type" href="#${$value}">${$value}</a>{{else}}<span class="type">${$value}</span>{{/if}}&gt;<span class="or"></span>{{/each}}
+{{if type}}
+  <span class="arg-type">
+      {{tmpl(type) 'type-info-template'}}
   </span>
 {{/if}}
 </script>
 
+<script type="text/x-jquery-tmpl" id="type-info-template">
+  <!-- Store last index to variable. Checking it the 'each' loop didn't work. -->
+  ${$item.lastIndex=nested.length-1, ""}
+  {{if union}}
+    {{each nested}}
+      {{tmpl($value) 'type-info-template'}}
+      {{if $index < $item.lastIndex}}|{{/if}}
+    {{/each}}
+  {{else}}
+    {{if typedoc}}
+      <a style="cursor: pointer;" class="type" title="Click to show type information" onclick="showModal(document.querySelector('#type-modal-${typedoc}'))">${name}</a>
+    {{else}}
+      <span class="type">${name}</span>
+    {{/if}}
+    {{if nested.length}}
+      [
+      {{each nested}}
+        {{tmpl($value) 'type-info-template'}}
+        {{if $index < $item.lastIndex}},{{/if}}
+      {{/each}}
+      ]
+    {{/if}}
+  {{/if}}
+</script>
 
 <script type="text/x-jquery-tmpl" id="data-types-template">
-    {{if dataTypes.length}}
+  {{if typedocs.length}}
     <h2 id="Data types">Data types</h2>
     <div class="data-types">
-        {{each dataTypes}}
+      {{each typedocs}}
         {{tmpl($value) 'data-type-template'}}
-        {{/each}}
+      {{/each}}
     </div>
-    {{/if}}
+  {{/if}}
 </script>
 
 <script type="text/x-jquery-tmpl" id="data-type-template">
-    <div class="data-type-container {{if hidden}}no-{{/if}}match" id="${name}">
+    <div class="data-type-container {{if hidden}}no-{{/if}}match" id="type-modal-${name}">
        <div class="data-type-name">
-            <h2>Type:
-            <a class="dt-name" href="#${encodeURIComponent(name)}"
-               title="Link to this data type">${name}</a>
-            </h2>
+            <h2>${name} (${type})</h2>
        </div>
        <div class="data-type-content">
+          {{if doc}}
+            <div class="dt-docs">
+              <h4>Documentation</h4>
+              <div class="dtdoc doc">{{html doc}}</div>
+            </div>
+          {{/if}}
           {{if members}}
             <div class="dt-members">
               <h4>Allowed Values</h4>
@@ -1633,6 +1818,9 @@ ${name}
                 {{each members}}
                 <li>
                   <span class="enum-member">${$value.name}</span>
+                  {{if accepts.indexOf("integer") != -1}}
+                    &nbsp; (<span class="enum-member">${$value.value}</span>)
+                  {{/if}}
                 </li>
                 {{/each}}
               </ul>
@@ -1654,20 +1842,22 @@ ${name}
                 </div>
             </div>
           {{/if}}
-          {{if doc}}
+          {{if accepts.length}}
             <div class="dt-docs">
-              <h4>Documentation</h4>
-              <div class="dtdoc doc">{{html doc}}</div>
+              <h4>Converted Types</h4>
+              <ul class="dt-usages-list">
+              {{each accepts}}
+                <li>${$value}</li>
+              {{/each}}
+              </ul>
             </div>
           {{/if}}
-          {{if usage}}
-            <div class="dt-usage">
-              <h4>Used in</h4>
-              <ul class="dt-usage-list">
-                {{each usage}}
-                <li>
-                <a href="#${encodeURIComponent($value)}">${$value}</a>
-                </li>
+          {{if usages.length}}
+            <div class="dt-usages">
+              <h4>Usages</h4>
+              <ul class="dt-usages-list">
+                {{each usages}}
+                  <li><a href="#${encodeURIComponent($value)}">${$value}</a></li>
                 {{/each}}
               </ul>
             </div>
