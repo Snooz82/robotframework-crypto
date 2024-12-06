@@ -20,7 +20,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from CryptoLibrary.__main__ import Encrypter
 from CryptoLibrary.utils import CryptoUtility
 
-__version__ = '0.4.0'
+__version__ = '0.4.1'
 
 
 def main():
