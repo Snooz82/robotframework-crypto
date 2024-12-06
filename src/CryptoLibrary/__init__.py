@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from CryptoLibrary.utils import CryptoUtility
-from robot.libraries.BuiltIn import BuiltIn
-from robot.api import logger
-from CryptoLibrary.__main__ import Encrypter
 import re
+
+from robot.api import logger
+from robot.libraries.BuiltIn import BuiltIn
+
+from CryptoLibrary.__main__ import Encrypter
+from CryptoLibrary.utils import CryptoUtility
 
 __version__ = '0.4.0'
 
@@ -25,7 +27,7 @@ def main():
     Encrypter().main()
 
 
-class CryptoLibrary(object):
+class CryptoLibrary:
     """
     ===================================================
     robotframework-crypto
@@ -274,7 +276,7 @@ class CryptoLibrary(object):
         Because CrytoLibrary is a global Library, this text will be hidden from the point
         where it is concealed until robot execution ends.
         Earlier appearances will be visible in the logs!"""
-        logger.info(f'Conceal the text in the logs.')
+        logger.info('Conceal the text in the logs.')
         self.value_list.append(text)
 
     def get_decrypted_text(self, cipher_text):
@@ -287,7 +289,7 @@ class CryptoLibrary(object):
             ${plain_text}=    Get Decrypted Text    crypt:sZ2i7bIQDlsWKJVhBb+Dz4w=
 
         """
-        logger.info(f'Decrypting text and return value.')
+        logger.info('Decrypting text and return value.')
         plaintext = self.crypto.decrypt_text(cipher_text)
         self.value_list.append(plaintext)
         return plaintext
@@ -330,6 +332,6 @@ class CryptoLibrary(object):
             if assignment_match:
                 variable_value = self.builtin.get_variable_value(assignment_match.group('var'))
                 if pattern.search(repr(variable_value)) or pattern.search(str(variable_value)):
-                    message.message = f'{assignment_match.group('var')} = "***"'
+                    message.message = f'{assignment_match.group("var")} = "***"'
                     return
             message.message = pattern.sub('***', message.message)

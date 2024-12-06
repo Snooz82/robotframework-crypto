@@ -13,10 +13,12 @@
 # limitations under the License.
 
 import os
+
+from questionary import Style
 from questionary import print as qprint
 from questionary import prompt as qprompt
+
 from CryptoLibrary.utils import CryptoUtility
-from questionary import Style
 
 custom_style_fancy = Style(
     [
@@ -41,7 +43,7 @@ def prompt(questions):
 __version__ = '0.0.3'
 
 
-class Encrypter(object):
+class Encrypter:
     def __init__(self):
         self.key_path = None
 
@@ -106,10 +108,10 @@ class Encrypter(object):
         if not crypto.password:
             input_pwd = prompt(input_password)
             crypto.password = input_pwd['password']
-        print(f' Decrypting...', end='\r')
+        print(' Decrypting...', end='\r')
         crypto.import_private_key_from_file()
         password = crypto.decrypt_text(answer['cipher_text'])
-        qprint(f'Your password is:', style='#06c8ff', flush=True)
+        qprint('Your password is:', style='#06c8ff', flush=True)
         qprint(f'\n{password}\n', style='bold #06c8ff')
 
     def open_config(self):  # 3

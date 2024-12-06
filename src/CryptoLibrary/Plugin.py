@@ -1,8 +1,10 @@
-from CryptoLibrary.utils import CryptoUtility
-from robot.libraries.BuiltIn import BuiltIn
-from SeleniumLibrary.base import LibraryComponent, keyword
-from robot.utils.robottypes import is_truthy
 import re
+
+from robot.libraries.BuiltIn import BuiltIn
+from robot.utils.robottypes import is_truthy
+from SeleniumLibrary.base import LibraryComponent, keyword
+
+from CryptoLibrary.utils import CryptoUtility
 
 
 class Plugin(LibraryComponent):

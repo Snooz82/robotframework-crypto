@@ -1,11 +1,11 @@
-from setuptools import setup
-from setuptools import find_packages
 import re
 from os.path import abspath, dirname, join
 
+from setuptools import find_packages, setup
+
 CURDIR = dirname(abspath(__file__))
 
-with open('README.rst', 'r', encoding='utf-8') as fh:
+with open('README.rst', encoding='utf-8') as fh:
     long_description = fh.read()
 
 with open(join(CURDIR, 'src', 'CryptoLibrary', '__init__.py'), encoding='utf-8') as f:

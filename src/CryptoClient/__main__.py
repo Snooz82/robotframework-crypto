@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from questionary import prompt, print
+from questionary import Style, print, prompt
+
 from CryptoLibrary.utils import CryptoUtility
-from questionary import Style
 
 custom_style_fancy = Style(
     [
@@ -34,7 +34,7 @@ custom_style_fancy = Style(
 __version__ = '0.0.3'
 
 
-class Encrypter(object):
+class Encrypter:
     def main(self):
         self.main_menu()
 
