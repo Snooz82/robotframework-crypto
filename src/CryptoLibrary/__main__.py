@@ -222,12 +222,15 @@ class Encrypter:
         answer = prompt(questions)
         key_path = answer['key_path']
         if key_path != '':
-            if 'create_dir' in answer and answer['create_dir'] == 'yes':
-                if not os.path.isdir(key_path):
-                    try:
-                        os.mkdir(key_path)
-                    except OSError as e:
-                        print(e)
+            if (
+                'create_dir' in answer
+                and answer['create_dir'] == 'yes'
+                and not os.path.isdir(key_path)
+            ):
+                try:
+                    os.mkdir(key_path)
+                except OSError as e:
+                    print(e)
             if not os.path.isdir(key_path):
                 print(f'key_path: "{key_path}" is not a valid directory!')
             elif not os.access(key_path, os.W_OK | os.X_OK):

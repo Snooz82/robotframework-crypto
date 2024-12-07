@@ -41,7 +41,7 @@ class Plugin(LibraryComponent):
         The `clear` argument is new in SeleniumLibrary 4.0. Hiding password
         logging from Selenium logs is new in SeleniumLibrary 4.2.
         """
-        self.info("Typing password into text field '%s'." % locator)
+        self.info(f"Typing password into text field '{locator}'.")
         if isinstance(password, str) and re.fullmatch(self.crypto.CIPHER_PATTERN, password):
             plaintext = self.crypto.decrypt_text(password)
         else:

@@ -15,6 +15,7 @@
 import json
 import os
 import re
+from contextlib import suppress
 
 from nacl import exceptions, hash, pwhash, secret, utils
 from nacl.encoding import Base64Encoder, RawEncoder
@@ -121,27 +122,23 @@ class CryptoUtility:
                 print(e.args[1])
 
     def delete_password_hash_file(self):
-        try:
+        with suppress(FileNotFoundError):
             os.remove(self.password_hash_file)
-        except FileNotFoundError:
-            pass
-        return True
+            return True
+        return False
 
     def delete_key_store(self):
-        try:
+        with suppress(FileNotFoundError):
             os.remove(self.private_key_store)
-        except FileNotFoundError:
-            pass
         self.delete_public_key_file()
         self.delete_password_hash_file()
         return True
 
     def delete_public_key_file(self):
-        try:
+        with suppress(FileNotFoundError):
             os.remove(self.public_key_file)
-        except FileNotFoundError:
-            pass
-        return True
+            return True
+        return False
 
     def export_password_hash_to_file(self):
         if not self._password_hash:
@@ -159,6 +156,7 @@ class CryptoUtility:
         if isinstance(file_content, dict):
             self._password_hash = file_content['password_hash']
             return True
+        return False
 
     def export_public_key_to_file(self):
         if not self.public_key:
@@ -172,6 +170,7 @@ class CryptoUtility:
             print(e)
         if self.public_key:
             return self._base64(self.public_key._public_key)
+        return None
 
     def set_public_key(self, b64_public_key):
         self.public_key = PublicKey(Base64Encoder.decode(b64_public_key))

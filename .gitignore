@@ -122,3 +122,4 @@ dmypy.json
 .venv/
 CreatePiPWheel.bat
 src/CryptoLibrary/keys/
+results/

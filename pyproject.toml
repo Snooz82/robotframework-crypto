@@ -36,6 +36,7 @@ ignore = [
   "INP001",  # Implicit Namespace
   "T201",  # Print statements
   "PYI041", # `float` instead of `int | float`
+  "PTH", # Pathlib
 ]
 select = [
   "E",

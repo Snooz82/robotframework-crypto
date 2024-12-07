@@ -20,7 +20,7 @@ from robot.libraries.BuiltIn import BuiltIn
 from CryptoLibrary.__main__ import Encrypter
 from CryptoLibrary.utils import CryptoUtility
 
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 
 def main():
@@ -260,7 +260,7 @@ class CryptoLibrary:
         +--------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
         """
         self.ROBOT_LIBRARY_LISTENER = self
-        self.value_list = list()
+        self.value_list = []
         self.crypto = CryptoUtility(key_path)
         self.original_log_level = 'INFO'
         self.disable_logging = False
@@ -268,6 +268,10 @@ class CryptoLibrary:
             self.crypto.password = password
         self.variable_decryption = variable_decryption
         self.builtin = BuiltIn()
+
+    @property
+    def secret_pattern(self):
+        return re.compile('|'.join([re.escape(x) for x in self.value_list]))
 
     def conceal_text_in_logs(self, text):
         """This keyword conceals the password, passed as input, in the logs.
@@ -279,7 +283,7 @@ class CryptoLibrary:
         logger.info('Conceal the text in the logs.')
         self.value_list.append(text)
 
-    def get_decrypted_text(self, cipher_text):
+    def get_decrypted_text(self, cipher_text: str) -> str:
         """Decrypts cipher text and returns the plain text.
 
         Example:
@@ -314,6 +318,11 @@ class CryptoLibrary:
     def _start_suite(self, suite, result):
         self._decrypt_variable_in_scope(self.builtin.set_suite_variable)
 
+    def _start_for_iteration(self, data, result):
+        for variable in result.assign:
+            if self._find_secret(self.builtin.get_variable_value(variable)):
+                result.assign[variable] = '***'
+
     def _decrypt_variable_in_scope(self, set_scope_variable):
         if self.variable_decryption:
             variables = self.builtin.get_variables()
@@ -325,13 +334,19 @@ class CryptoLibrary:
 
     def _log_message(self, message):
         if self.value_list:
-            pattern = re.compile('|'.join([re.escape(x) for x in self.value_list]))
             assignment_match = re.fullmatch(
                 r'(?P<var>[\$@&]\{[^\}]*\})\s*=\s*(?P<value>.*)', message.message
             )
             if assignment_match:
                 variable_value = self.builtin.get_variable_value(assignment_match.group('var'))
-                if pattern.search(repr(variable_value)) or pattern.search(str(variable_value)):
+                if self._find_secret(variable_value):
                     message.message = f'{assignment_match.group("var")} = "***"'
                     return
-            message.message = pattern.sub('***', message.message)
+            message.message = self.secret_pattern.sub('***', message.message)
+
+    def _find_secret(self, value):
+        if not self.value_list:
+            return None
+        return bool(
+            self.secret_pattern.search(repr(value)) or self.secret_pattern.search(str(value))
+        )
